@@ -1,0 +1,9 @@
+<mat-toolbar color="primary">
+    <span>Request Logger</span>
+    <button mat-button [routerLink]="['/responses']">Responses</button>
+    <button mat-button [routerLink]="['/log']">Logger</button>
+</mat-toolbar>
+
+<div style="margin: 10px;">
+    <router-outlet></router-outlet>
+</div>

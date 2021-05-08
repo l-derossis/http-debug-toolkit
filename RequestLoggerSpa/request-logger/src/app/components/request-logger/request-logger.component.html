@@ -1,0 +1,8 @@
+<mat-expansion-panel hideToggle style="margin-top: 5px;" *ngFor="let request of requests">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{request.split("\n")[0]}}
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <span style=" white-space: pre-line;">{{request}}</span>
+</mat-expansion-panel>
