@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {
   FormArray,
-  FormControl,
   FormGroup,
   FormBuilder,
   Validators,
+  ValidatorFn,
+  AbstractControl,
 } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UrlTree } from '@angular/router';
 import { MockedResponse } from 'src/app/models/mocked-response';
 
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
@@ -17,10 +20,13 @@ import { ResponsesApiService } from 'src/app/services/responses-api.service';
 })
 export class ResponseCreationComponent implements OnInit {
   requestForm: FormGroup = this.formBuilder.group({
-    route: [''],
-    method: [''],
-    body: [''],
-    statusCode: [''],
+    route: this.formBuilder.control('/', [
+      Validators.required,
+      urlValidator(/^\/[-a-zA-Z0-9@:%_+.~#?&=\/]*$/i),
+    ]),
+    method: ['GET', [Validators.required]],
+    body: [],
+    statusCode: ['200', [Validators.required]],
     headers: this.formBuilder.array([this.createHeader()]),
   });
 
@@ -28,7 +34,8 @@ export class ResponseCreationComponent implements OnInit {
 
   constructor(
     private reponsesService: ResponsesApiService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {}
@@ -39,9 +46,15 @@ export class ResponseCreationComponent implements OnInit {
     console.log(response);
 
     this.reponsesService.registerResponse(response).subscribe(
-      (obj) => console.log(obj),
+      (obj) => {
+        this.openSnackBar('Mocked response successfully created.');
+      },
       (error) => console.error(error)
     );
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'Close', { duration: 2000 });
   }
 
   getModelFromForm(): MockedResponse {
@@ -88,4 +101,11 @@ export class ResponseCreationComponent implements OnInit {
       this.addHeader();
     }
   }
+}
+
+export function urlValidator(urlRegex: RegExp): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const valid = urlRegex.test(control.value);
+    return valid ? null : { invalidUrl: { value: control.value } };
+  };
 }
