@@ -4,6 +4,7 @@ using RequestLogger.Domain.Services;
 using RequestLogger.Dtos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RequestLogger.Controllers
@@ -40,6 +41,16 @@ namespace RequestLogger.Controllers
             await _service.RegisterMockedResponse(new List<MockedResponse>{response});
 
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IList<ResponseDto>>> GetResponses()
+        {
+            var responses = await _service.GetResponses();
+
+            var dtos = responses.Select(ResponseDto.FromEntity).ToList();
+
+            return dtos;
         }
     }
 }

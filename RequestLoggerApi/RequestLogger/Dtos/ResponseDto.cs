@@ -20,13 +20,25 @@ namespace RequestLogger.Dtos
 
         public MockedResponse ToEntity()
         {
-            return new MockedResponse()
+            return new MockedResponse
             {
                 Route = Route,
                 Method = new HttpMethod(Method),
                 Headers = Headers,
                 Body = Body,
                 StatusCode = (HttpStatusCode) (StatusCode ?? throw new ArgumentNullException(nameof(StatusCode)))
+            };
+        }
+
+        public static ResponseDto FromEntity(MockedResponse entity)
+        {
+            return new ResponseDto
+            {
+                Body = entity.Body,
+                Route = entity.Route,
+                StatusCode = (int)entity.StatusCode,
+                Headers = entity.Headers,
+                Method = entity.Method.Method
             };
         }
     }

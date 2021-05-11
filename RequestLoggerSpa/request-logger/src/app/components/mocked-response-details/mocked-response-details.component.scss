@@ -1,0 +1,28 @@
+.label {
+  color: grey;
+  margin-right: 5px;
+}
+
+.value {
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+td {
+  border: 1px solid black;
+  overflow-wrap: break-word;
+  padding: 5px;
+}
+
+.body {
+  background-color: ghostwhite;
+  padding: 10px;
+  min-height: 150px;
+  border-radius: 5px;
+  white-space: pre-line;
+}

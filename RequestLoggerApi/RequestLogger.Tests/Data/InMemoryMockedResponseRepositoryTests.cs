@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -78,7 +79,42 @@ namespace RequestLogger.Tests.Data
             var response = await _repository.GetMockedResponse(HttpMethod.Post, "found");
 
             response.Should().BeNull();
-;        }
+;       }
+
+        [TestMethod]
+        public async Task GetAllResponses_Empty()
+        {
+            var responses = await _repository.GetAllResponses();
+
+            responses.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public async Task GetAllResponses()
+        {
+            var response1 = CreateResponse("/route1", HttpMethod.Get);
+            var response2 = CreateResponse("/route2", HttpMethod.Get);
+            await _repository.RegisterResponses(new List<MockedResponse> {response1, response2});
+
+            var responses = await _repository.GetAllResponses();
+
+            responses.Count.Should().Be(2);
+            responses.Should().Contain(r => r.Route == "/route1");
+            responses.Should().Contain(r => r.Route == "/route2");
+        }
+
+        [TestMethod]
+        public async Task GetAllResponses_DeepCopy()
+        {
+            var response = CreateResponse("/route1", HttpMethod.Get);
+            await _repository.RegisterResponses(new List<MockedResponse> { response});
+
+            var responses = await _repository.GetAllResponses();
+            responses.First().Route = "/modifiedRoute";
+
+            responses = await _repository.GetAllResponses();
+            responses.First().Route.Should().Be("/route1");
+        }
 
         private MockedResponse CreateResponse(string route, HttpMethod method)
         {

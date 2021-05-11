@@ -55,5 +55,37 @@ namespace RequestLogger.Tests.Controllers
             var result = await _controller.RegisterResponse(dto);
             result.Should().BeOfType<BadRequestObjectResult>();
         }
+
+        [TestMethod]
+        public async Task GetResponses_Empty()
+        {
+            var result = await _controller.GetResponses();
+
+            result.Value.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task GetResponses_MultipleElements()
+        {
+            await _controller.RegisterResponse(new ResponseDto
+            {
+                Body = "body",
+                Method = "GET",
+                Route = "/route",
+                StatusCode = 200
+            });
+
+            await _controller.RegisterResponse(new ResponseDto
+            {
+                Body = "body",
+                Method = "GET",
+                Route = "/route2",
+                StatusCode = 200
+            });
+
+            var result = await _controller.GetResponses();
+
+            result.Value.Count.Should().Be(2);
+        }
     }
 }

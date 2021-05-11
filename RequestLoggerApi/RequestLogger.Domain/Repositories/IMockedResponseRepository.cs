@@ -10,5 +10,7 @@ namespace RequestLogger.Domain.Repositories
         Task<MockedResponse> GetMockedResponse(HttpMethod httpMethod, string route);
 
         Task RegisterResponses(IEnumerable<MockedResponse> responses);
+
+        Task<IList<MockedResponse>> GetAllResponses();
     }
 }

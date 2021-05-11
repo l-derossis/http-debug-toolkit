@@ -1,6 +1,7 @@
 ﻿using System;
 using RequestLogger.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using RequestLogger.Domain.Repositories;
@@ -37,6 +38,18 @@ namespace RequestLogger.Infrastructure.Data
                  
                 _responses.Add(mockedResponse);
             }
+        }
+
+        public async Task<IList<MockedResponse>> GetAllResponses()
+        {
+            return _responses.Select(r => new MockedResponse()
+            {
+                Body = r.Body,
+                Route = r.Route,
+                Headers = r.Headers,
+                Method = r.Method,
+                StatusCode = r.StatusCode
+            }).ToList();
         }
     }
 }

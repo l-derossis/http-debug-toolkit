@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
 import { ResponsesComponent } from './components/responses/responses.component';
 import { ResponseCreationComponent } from './components/response-creation/response-creation.component';
+import { MockedResponseDetailsComponent } from './components/mocked-response-details/mocked-response-details.component';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -20,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     RequestLoggerComponent,
     ResponsesComponent,
     ResponseCreationComponent,
+    MockedResponseDetailsComponent,
   ],
   imports: [
     HttpClientModule,
@@ -44,6 +47,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTabsModule,
     MatIconModule,
     MatSnackBarModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

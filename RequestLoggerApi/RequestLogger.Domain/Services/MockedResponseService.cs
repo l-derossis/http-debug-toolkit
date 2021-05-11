@@ -38,5 +38,14 @@ namespace RequestLogger.Domain.Services
         {
             await _repository.RegisterResponses(responses);
         }
+
+        /// <summary>
+        /// Get all registered mocked responses
+        /// </summary>
+        /// <returns>A list of mocked responses</returns>
+        public async Task<IList<MockedResponse>> GetResponses()
+        {
+            return await _repository.GetAllResponses();
+        }
     }
 }

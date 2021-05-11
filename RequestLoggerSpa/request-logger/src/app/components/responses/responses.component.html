@@ -1,1 +1,11 @@
-<app-response-creation></app-response-creation>
+<!-- <app-response-creation></app-response-creation> -->
+
+<div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="none stretch">
+    <mat-selection-list #responsesList role="list" fxFlex="50%" [multiple]=false
+        (selectionChange)="responseSelected($event, responsesList.selectedOptions)">
+        <mat-list-option *ngFor="let response of responses" [value]="response" class="mat-elevation-z1">
+            {{response.Route}}
+        </mat-list-option>
+    </mat-selection-list>
+    <app-mocked-response-details fxFlex="50%" [response]="selectedResponse"></app-mocked-response-details>
+</div>
