@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MatListModule } from '@angular/material/list';
     MatIconModule,
     MatSnackBarModule,
     MatListModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

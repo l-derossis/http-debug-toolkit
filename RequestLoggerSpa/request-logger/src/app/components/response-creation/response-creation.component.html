@@ -1,4 +1,10 @@
-<div fxLayout="column" class="tab-content" [formGroup]="requestForm">
+<div fxLayout="column" class="tab-content" [formGroup]="requestForm" fxFlex>
+
+    <mat-form-field appearance="fill" fxFlex>
+        <mat-label>Route</mat-label>
+        <input matInput formControlName="route">
+    </mat-form-field>
+
     <div fxLayout="row" fxLayoutGap="10px">
         <mat-form-field appearance="fill">
             <mat-label>Method</mat-label>
@@ -15,49 +21,45 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" fxFlex="80">
-            <mat-label>Route</mat-label>
-            <input matInput formControlName="route">
-        </mat-form-field>
-
         <mat-form-field appearance="fill">
             <mat-label>Status code</mat-label>
             <input matInput type="number" formControlName="statusCode">
         </mat-form-field>
     </div>
 
-    <mat-tab-group>
-        <mat-tab label="Body">
-            <div>
-                <mat-form-field appearance="fill" fxFlex>
-                    <textarea matInput formControlName="body"></textarea>
-                </mat-form-field>
-            </div>
-        </mat-tab>
-        <mat-tab label="Headers">
-            <ng-container formArrayName="headers">
-                <div *ngFor="let _ of headers.controls; index as i" fxLayout="row" fxLayoutGap="20px"
-                    fxLayoutAlign="start center">
-                    <ng-container [formGroupName]="i">
-                        <mat-form-field fxFlex="35">
-                            <mat-label>Data key</mat-label>
-                            <input formControlName="key" #key matInput placeholder="Key" (input)="onHeaderInput(i)">
-                        </mat-form-field>
-
-                        <mat-form-field fxFlex="20">
-                            <mat-label>Value</mat-label>
-                            <input formControlName="value" matInput placeholder="Value" (input)="onHeaderInput(i)">
-                        </mat-form-field>
-
-                        <button *ngIf=" headers.controls.length> 1" mat-icon-button color="primary"
-                            (click)="deleteHeader(i)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </ng-container>
+    <mat-dialog-content>
+        <mat-tab-group fxFlex>
+            <mat-tab label="Body">
+                <div>
+                    <mat-form-field appearance="fill" fxFlex>
+                        <textarea matInput formControlName="body" class="tab"></textarea>
+                    </mat-form-field>
                 </div>
-            </ng-container>
-        </mat-tab>
-    </mat-tab-group>
+            </mat-tab>
+            <mat-tab label="Headers" fxFlex>
+                <div formArrayName="headers" class="tab">
+                    <div *ngFor="let _ of headers.controls; index as i" fxLayout="row" fxLayoutGap="20px"
+                        fxLayoutAlign="start center">
+                        <ng-container [formGroupName]="i">
+                            <mat-form-field>
+                                <mat-label>Data key</mat-label>
+                                <input formControlName="key" #key matInput placeholder="Key" (input)="onHeaderInput(i)">
+                            </mat-form-field>
 
+                            <mat-form-field>
+                                <mat-label fxFill>Value</mat-label>
+                                <input formControlName="value" matInput placeholder="Value" (input)="onHeaderInput(i)">
+                            </mat-form-field>
+
+                            <button *ngIf=" headers.controls.length> 1" mat-icon-button color="primary"
+                                (click)="deleteHeader(i)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
     <button mat-raised-button color="primary" (click)="submit()">Create</button>
 </div>

@@ -1,11 +1,29 @@
-<!-- <app-response-creation></app-response-creation> -->
+<div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="none stretch" *ngIf="responses.length; else empty">
+    <div fxLayout="column" fxLayoutGap="10px" fxFlex="50%">
+        <mat-selection-list #responsesList role="list" [multiple]=false
+            (selectionChange)="responseSelected($event, responsesList.selectedOptions)">
+            <mat-list-option *ngFor="let response of responses" [value]="response" class="mat-elevation-z1">
+                {{response.Route}}
+            </mat-list-option>
+        </mat-selection-list>
 
-<div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="none stretch">
-    <mat-selection-list #responsesList role="list" fxFlex="50%" [multiple]=false
-        (selectionChange)="responseSelected($event, responsesList.selectedOptions)">
-        <mat-list-option *ngFor="let response of responses" [value]="response" class="mat-elevation-z1">
-            {{response.Route}}
-        </mat-list-option>
-    </mat-selection-list>
+        <button mat-fab color="primary" (click)="openRouteCreationPopup()" fxFlexAlign="center">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
     <app-mocked-response-details fxFlex="50%" [response]="selectedResponse"></app-mocked-response-details>
 </div>
+<ng-template #empty>
+    <div class="empty-content" fxLayout="column">
+
+        <p class="center">
+            No registered routes. Add your first here:
+        </p>
+
+        <br />
+
+        <button mat-fab color="primary" (click)="openRouteCreationPopup()" fxFlexAlign="center">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</ng-template>

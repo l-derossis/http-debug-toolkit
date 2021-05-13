@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormArray,
   FormGroup,
@@ -7,8 +7,6 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { UrlTree } from '@angular/router';
 import { MockedResponse } from 'src/app/models/mocked-response';
 
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
@@ -32,10 +30,11 @@ export class ResponseCreationComponent implements OnInit {
 
   headers = this.requestForm.get('headers') as FormArray;
 
+  @Output() routeCreatedEvent = new EventEmitter();
+
   constructor(
     private reponsesService: ResponsesApiService,
-    private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {}
@@ -46,15 +45,11 @@ export class ResponseCreationComponent implements OnInit {
     console.log(response);
 
     this.reponsesService.registerResponse(response).subscribe(
-      (obj) => {
-        this.openSnackBar('Mocked response successfully created.');
+      (_) => {
+        this.routeCreatedEvent.emit();
       },
       (error) => console.error(error)
     );
-  }
-
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'Close', { duration: 2000 });
   }
 
   getModelFromForm(): MockedResponse {
