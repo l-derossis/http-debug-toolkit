@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { MockedResponse } from '../models/mocked-response';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { map } from 'rxjs/operators';
 export class ResponsesApiService {
   private readonly apiEndpoint: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.apiEndpoint = environment.apiUrl + '/api/configuration/responses';
   }
 

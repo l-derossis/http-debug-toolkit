@@ -24,6 +24,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MethodRouteComponent } from './components/shared/method-route/method-route.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     ResponsesComponent,
     ResponseCreationComponent,
     MockedResponseDetailsComponent,
+    MethodRouteComponent,
   ],
   imports: [
     HttpClientModule,

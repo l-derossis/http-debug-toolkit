@@ -10,7 +10,8 @@ import { ResponsesApiService } from 'src/app/services/responses-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseCreationComponent } from '../response-creation/response-creation.component';
 import { MatSidenav } from '@angular/material/sidenav';
-import { first } from 'rxjs/operators';
+import { delay, first } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-responses',
@@ -20,29 +21,44 @@ import { first } from 'rxjs/operators';
 export class ResponsesComponent implements OnInit {
   responses: MockedResponse[] = [];
   selectedResponse: MockedResponse | undefined;
-  @ViewChild('drawer') drawer!: MatSidenav;
-  @ViewChild('responsesList') list!: MatSelectionList;
+  routeQueryParam: string = '';
+  @ViewChild('responsesList') list: MatSelectionList | undefined;
+
+  private _drawer: MatSidenav | undefined;
+  @ViewChild('drawer') set drawer(drawer: MatSidenav | undefined) {
+    this._drawer = drawer;
+    if (this._drawer && this.routeQueryParam) {
+      setTimeout(() => {
+        // setTimeout needed to avoid modifying the view while it's rendering
+        this.openDetailsDrawer(this.routeQueryParam);
+      });
+    }
+  }
 
   constructor(
     private responsesService: ResponsesApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadRoutes();
-  }
 
-  ngAfterViewInit(): void {}
+    this.route.queryParams.subscribe((p) => {
+      this.routeQueryParam = p.route;
+      this.openDetailsDrawer(this.routeQueryParam);
+    });
+  }
 
   responseSelected(
     _: MatSelectionListChange,
     options: SelectionModel<MatListOption>
   ) {
-    this.selectedResponse = options.selected[0]?.value;
-    this.drawer?.open();
-    this.drawer.closedStart.pipe(first()).subscribe((_) => {
-      console.log('test');
-      this.list.selectedOptions.selected[0]?.toggle();
+    this.router.navigate([], {
+      queryParams: {
+        route: options.selected[0]?.value.Route,
+      },
     });
   }
 
@@ -57,6 +73,35 @@ export class ResponsesComponent implements OnInit {
   loadRoutes() {
     this.responsesService.getResponses().subscribe((r) => {
       this.responses = r;
+
+      if (
+        this.routeQueryParam &&
+        this.responses.some((r) => r.Route == this.routeQueryParam)
+      ) {
+        this.openDetailsDrawer(this.routeQueryParam);
+      }
+    });
+  }
+
+  openDetailsDrawer(route: string) {
+    const response = this.responses?.find((r) => r.Route == route);
+    if (response) {
+      this.selectedResponse = response;
+      this._drawer?.open();
+      this._drawer?.closedStart.pipe(first()).subscribe((_) => {
+        this.list?.selectedOptions.selected[0]?.toggle();
+        this.clearRouteParam();
+      });
+    }
+  }
+
+  clearRouteParam() {
+    let params = { ...this.route.snapshot.queryParams };
+    delete params.route;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: params,
     });
   }
 }
