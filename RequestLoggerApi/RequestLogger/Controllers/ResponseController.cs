@@ -38,7 +38,14 @@ namespace RequestLogger.Controllers
                 return BadRequest(e.Message);
             }
 
-            await _service.RegisterMockedResponse(new List<MockedResponse>{response});
+            try
+            {
+                await _service.RegisterMockedResponse(new List<MockedResponse> { response });
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict(e.Message);
+            }
 
             return Ok();
         }

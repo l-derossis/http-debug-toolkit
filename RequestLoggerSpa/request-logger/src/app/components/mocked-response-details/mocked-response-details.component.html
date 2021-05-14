@@ -1,4 +1,4 @@
-<div *ngIf="response; else detailsBlock" fxLayout="column" fxLayoutGap="20px">
+<div *ngIf="response" fxLayout="column" fxLayoutGap="20px" class="container">
     <div fxLayout="row">
         <span class="label">METHOD:</span>
         <span class="value">{{response?.Method}}</span>
@@ -26,11 +26,6 @@
         </table>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="10px">
-        <span class="label">BODY</span>
-        <div class="body">{{response?.Body}}</div>
-    </div>
+    <span class="label">BODY</span>
+    <div class="body" fxFlex>{{response?.Body}}</div>
 </div>
-<ng-template #detailsBlock>
-    <span class="label">RESPONSE DETAILS</span>
-</ng-template>

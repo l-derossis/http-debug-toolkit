@@ -57,6 +57,23 @@ namespace RequestLogger.Tests.Controllers
         }
 
         [TestMethod]
+        public async Task RegisterResponse_Duplicate()
+        {
+            var dto = new ResponseDto
+            {
+                Body = "content",
+                Method = "GET",
+                Route = "/route",
+                StatusCode = 200
+            };
+
+            await _controller.RegisterResponse(dto);
+            var result = await _controller.RegisterResponse(dto);
+
+            result.Should().BeOfType<ConflictObjectResult>();
+        }
+
+        [TestMethod]
         public async Task GetResponses_Empty()
         {
             var result = await _controller.GetResponses();

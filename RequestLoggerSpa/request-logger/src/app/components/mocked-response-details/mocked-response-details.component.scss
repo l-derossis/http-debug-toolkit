@@ -1,3 +1,8 @@
+.container {
+  margin: 10px;
+  height: 100%;
+}
+
 .label {
   color: grey;
   margin-right: 5px;
@@ -20,9 +25,8 @@ td {
 }
 
 .body {
-  background-color: ghostwhite;
+  background-color: gainsboro;
   padding: 10px;
-  min-height: 150px;
   border-radius: 5px;
   white-space: pre-line;
 }

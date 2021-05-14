@@ -3,6 +3,7 @@
     <mat-form-field appearance="fill" fxFlex>
         <mat-label>Route</mat-label>
         <input matInput formControlName="route">
+        <mat-error *ngIf="requestForm.get('route')?.hasError('duplicate')">Route already exists</mat-error>
     </mat-form-field>
 
     <div fxLayout="row" fxLayoutGap="10px">

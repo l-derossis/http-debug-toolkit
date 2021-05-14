@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormArray,
@@ -48,8 +49,14 @@ export class ResponseCreationComponent implements OnInit {
       (_) => {
         this.routeCreatedEvent.emit();
       },
-      (error) => console.error(error)
+      (error) => this.handleRouteCreationError(error)
     );
+  }
+
+  handleRouteCreationError(error: HttpErrorResponse) {
+    if (error.status == 409) {
+      this.requestForm.get('route')?.setErrors({ duplicate: true });
+    }
   }
 
   getModelFromForm(): MockedResponse {

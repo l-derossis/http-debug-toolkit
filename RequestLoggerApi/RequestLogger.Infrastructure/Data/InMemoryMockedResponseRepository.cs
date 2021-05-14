@@ -33,7 +33,7 @@ namespace RequestLogger.Infrastructure.Data
 
                 if (searchedResponse != null)
                 {
-                    _responses.Remove(searchedResponse);
+                    throw new InvalidOperationException($"Route {mockedResponse.Route} already exists");
                 }
                  
                 _responses.Add(mockedResponse);

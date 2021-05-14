@@ -51,6 +51,7 @@ namespace RequestLogger.Tests.Data
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public async Task RegisterResponses_Duplicate()
         {
             var resp1 = CreateResponse("/route", HttpMethod.Get);
@@ -58,9 +59,7 @@ namespace RequestLogger.Tests.Data
             resp2.Body = "newValue";
 
             await _repository.RegisterResponses(new List<MockedResponse>{resp1, resp2});
-            var savedResponse = await _repository.GetMockedResponse(resp1.Method, resp1.Route);
-
-            savedResponse.Body.Should().Be("newValue");
+            await _repository.GetMockedResponse(resp1.Method, resp1.Route);
         }
 
         [TestMethod]

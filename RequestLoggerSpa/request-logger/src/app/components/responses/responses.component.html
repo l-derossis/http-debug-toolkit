@@ -1,18 +1,24 @@
-<div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="none stretch" *ngIf="responses.length; else empty">
-    <div fxLayout="column" fxLayoutGap="10px" fxFlex="50%">
-        <mat-selection-list #responsesList role="list" [multiple]=false
-            (selectionChange)="responseSelected($event, responsesList.selectedOptions)">
-            <mat-list-option *ngFor="let response of responses" [value]="response" class="mat-elevation-z1">
-                {{response.Route}}
-            </mat-list-option>
-        </mat-selection-list>
+<mat-drawer-container *ngIf="responses.length; else empty" class="container">
+    <mat-drawer #drawer mode="over" opened="false" class="drawer" position="end">
+        <app-mocked-response-details [response]="selectedResponse"></app-mocked-response-details>
+    </mat-drawer>
 
-        <button mat-fab color="primary" (click)="openRouteCreationPopup()" fxFlexAlign="center">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
-    <app-mocked-response-details fxFlex="50%" [response]="selectedResponse"></app-mocked-response-details>
-</div>
+    <mat-drawer-content>
+        <div fxLayout="column" fxLayoutGap="10px">
+            <mat-selection-list #responsesList role="list" [multiple]=false
+                (selectionChange)="responseSelected($event, responsesList.selectedOptions)">
+                <mat-list-option *ngFor="let response of responses" [value]="response" class="mat-elevation-z1">
+                    {{response.Route}}
+                </mat-list-option>
+            </mat-selection-list>
+
+            <button mat-fab color="primary" (click)="openRouteCreationPopup()" fxFlexAlign="center">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>
+
 <ng-template #empty>
     <div class="empty-content" fxLayout="column">
 
