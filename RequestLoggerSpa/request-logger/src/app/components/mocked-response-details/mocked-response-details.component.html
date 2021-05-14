@@ -1,15 +1,6 @@
 <div *ngIf="response" fxLayout="column" fxLayoutGap="20px" class="container">
-    <!-- <div fxLayout="row">
-        <span class="label">METHOD:</span>
-        <span class="value">{{response?.Method}}</span>
-    </div>
 
-    <div fxLayout="row">
-        <span class="label">ROUTE:</span>
-        <span class="value">{{response?.Route}}</span>
-    </div> -->
-
-    <app-method-route></app-method-route>
+    <app-method-route Method={{response?.Method}} Route={{response?.Route}}></app-method-route>
 
     <div fxLayout="row">
         <span class="label">STATUS CODE:</span>
