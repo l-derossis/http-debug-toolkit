@@ -1,16 +1,15 @@
-<mat-drawer-container *ngIf="responses.length; else empty" class="container">
+<mat-drawer-container *ngIf="responses.length; else empty">
     <mat-drawer #drawer mode="over" opened="false" class="drawer" position="end">
         <app-mocked-response-details [response]="selectedResponse"></app-mocked-response-details>
     </mat-drawer>
 
     <mat-drawer-content>
-        <div fxLayout="column" fxLayoutGap="10px">
-            <mat-selection-list #responsesList role="list" [multiple]=false
-                (selectionChange)="responseSelected($event, responsesList.selectedOptions)">
-                <mat-list-option *ngFor="let response of responses" [value]="response" class="mat-elevation-z1">
-                    {{response.Route}}
-                </mat-list-option>
-            </mat-selection-list>
+        <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden;">
+
+            <app-method-route Method={{response.Method}} Route={{response.Route}}
+                *ngFor="let response of responses; index as i" class="selectable-list-element"
+                (click)="responseSelected(i)">
+            </app-method-route>
 
             <button mat-fab color="primary" (click)="openRouteCreationPopup()" fxFlexAlign="center">
                 <mat-icon>add</mat-icon>
@@ -22,7 +21,7 @@
 <ng-template #empty>
     <div class="empty-content" fxLayout="column">
 
-        <p class="center">
+        <p>
             No registered routes. Add your first here:
         </p>
 

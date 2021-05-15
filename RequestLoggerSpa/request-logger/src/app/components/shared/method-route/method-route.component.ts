@@ -4,6 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
   selector: 'app-method-route',
   templateUrl: './method-route.component.html',
   styleUrls: ['./method-route.component.scss'],
+  host: {},
 })
 export class MethodRouteComponent implements OnInit {
   @Input() Route: string = '';

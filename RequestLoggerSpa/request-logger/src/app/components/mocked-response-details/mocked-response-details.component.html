@@ -1,14 +1,14 @@
-<div *ngIf="response" fxLayout="column" fxLayoutGap="20px" class="container">
+<app-method-route Method={{response?.Method}} Route={{response?.Route}}></app-method-route>
 
-    <app-method-route Method={{response?.Method}} Route={{response?.Route}}></app-method-route>
+<div fxLayout="row" fxLayoutGap="10px" class="section">
+    <span class="label">STATUS CODE:</span>
+    <span class="value">{{response?.StatusCode}}</span>
+</div>
 
-    <div fxLayout="row">
-        <span class="label">STATUS CODE:</span>
-        <span class="value">{{response?.StatusCode}}</span>
-    </div>
+<div fxLayout="column" fxLayoutGap="10px" class="section">
+    <span class="label">HEADERS</span>
 
-    <div fxLayout="column" fxLayoutGap="10px">
-        <span class="label">HEADERS</span>
+    <ng-container *ngIf="response?.Headers.length > 0; else noHeader">
         <table fxFill>
             <tbody>
                 <tr *ngFor="let pair of response?.Headers | keyvalue">
@@ -17,8 +17,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </ng-container>
+    <ng-template #noHeader>
+        <span>No header defined</span>
+    </ng-template>
+</div>
 
+<div class="section" fxLayout="column" fxFlex>
     <span class="label">BODY</span>
     <div class="body" fxFlex>{{response?.Body}}</div>
 </div>

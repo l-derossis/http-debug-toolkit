@@ -1,16 +1,11 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  MatListOption,
-  MatSelectionList,
-  MatSelectionListChange,
-} from '@angular/material/list';
+import { MatSelectionList } from '@angular/material/list';
 import { MockedResponse } from 'src/app/models/mocked-response';
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseCreationComponent } from '../response-creation/response-creation.component';
 import { MatSidenav } from '@angular/material/sidenav';
-import { delay, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -21,16 +16,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ResponsesComponent implements OnInit {
   responses: MockedResponse[] = [];
   selectedResponse: MockedResponse | undefined;
-  routeQueryParam: string = '';
-  @ViewChild('responsesList') list: MatSelectionList | undefined;
 
   private _drawer: MatSidenav | undefined;
   @ViewChild('drawer') set drawer(drawer: MatSidenav | undefined) {
     this._drawer = drawer;
-    if (this._drawer && this.routeQueryParam) {
+    if (this._drawer) {
       setTimeout(() => {
         // setTimeout needed to avoid modifying the view while it's rendering
-        this.openDetailsDrawer(this.routeQueryParam);
+        this.openDetailsDrawerIfRequired();
       });
     }
   }
@@ -46,18 +39,15 @@ export class ResponsesComponent implements OnInit {
     this.loadRoutes();
 
     this.route.queryParams.subscribe((p) => {
-      this.routeQueryParam = p.route;
-      this.openDetailsDrawer(this.routeQueryParam);
+      this.openDetailsDrawerIfRequired();
     });
   }
 
-  responseSelected(
-    _: MatSelectionListChange,
-    options: SelectionModel<MatListOption>
-  ) {
+  responseSelected(index: number) {
     this.router.navigate([], {
       queryParams: {
-        route: options.selected[0]?.value.Route,
+        route: this.responses[index].Route,
+        method: this.responses[index].Method,
       },
     });
   }
@@ -74,30 +64,45 @@ export class ResponsesComponent implements OnInit {
     this.responsesService.getResponses().subscribe((r) => {
       this.responses = r;
 
-      if (
-        this.routeQueryParam &&
-        this.responses.some((r) => r.Route == this.routeQueryParam)
-      ) {
-        this.openDetailsDrawer(this.routeQueryParam);
+      const response = this.getResponseFromQueryParams();
+
+      if (response) {
+        this.openDetailsDrawerIfRequired();
       }
     });
   }
 
-  openDetailsDrawer(route: string) {
-    const response = this.responses?.find((r) => r.Route == route);
+  openDetailsDrawerIfRequired() {
+    const response = this.getResponseFromQueryParams();
+
     if (response) {
       this.selectedResponse = response;
       this._drawer?.open();
       this._drawer?.closedStart.pipe(first()).subscribe((_) => {
-        this.list?.selectedOptions.selected[0]?.toggle();
-        this.clearRouteParam();
+        this.clearRouteMethodParams();
       });
     }
   }
 
-  clearRouteParam() {
+  getResponseFromQueryParams(): MockedResponse | undefined {
+    const route: string = this.route.snapshot.queryParams.route;
+    const method: string = this.route.snapshot.queryParams.method;
+
+    if (!route || !method) return undefined;
+
+    const response = this.responses?.find(
+      (r) =>
+        r.Route.toLowerCase() == route.toLowerCase() &&
+        r.Method.toLowerCase() == method.toLowerCase()
+    );
+
+    return response;
+  }
+
+  clearRouteMethodParams() {
     let params = { ...this.route.snapshot.queryParams };
     delete params.route;
+    delete params.method;
 
     this.router.navigate([], {
       relativeTo: this.route,

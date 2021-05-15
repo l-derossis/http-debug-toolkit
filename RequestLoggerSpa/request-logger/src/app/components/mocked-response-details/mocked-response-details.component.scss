@@ -1,16 +1,9 @@
-.container {
-  margin: 10px;
+:host {
   height: 100%;
-}
-
-.label {
-  color: grey;
-  margin-right: 5px;
-}
-
-.value {
-  font-weight: bold;
-  overflow-wrap: anywhere;
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 table {
@@ -22,6 +15,19 @@ td {
   border: 1px solid black;
   overflow-wrap: break-word;
   padding: 5px;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.label {
+  color: grey;
+}
+
+.value {
+  font-weight: bold;
+  overflow-wrap: anywhere;
 }
 
 .body {
