@@ -46,7 +46,7 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = HttpStatusCode.Accepted
             };
             var repository = new InMemoryMockedResponseRepository();
-            await repository.RegisterResponses(new List<MockedResponse>{response});
+            await repository.RegisterResponse(response);
 
             var context = new DefaultHttpContext();
             context.Request.Path = "/route";
@@ -70,7 +70,7 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = HttpStatusCode.OK
             };
             var repository = new InMemoryMockedResponseRepository();
-            await repository.RegisterResponses(new List<MockedResponse> { response });
+            await repository.RegisterResponse(response);
 
             var context = new DefaultHttpContext();
             context.Request.Path = "/route";

@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RequestLogger.Controllers;
@@ -6,6 +9,8 @@ using RequestLogger.Domain.Services;
 using RequestLogger.Dtos;
 using RequestLogger.Infrastructure.Data;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using RequestLogger.Controllers.Results;
 
 namespace RequestLogger.Tests.Controllers
 {
@@ -71,6 +76,63 @@ namespace RequestLogger.Tests.Controllers
             var result = await _controller.RegisterResponse(dto);
 
             result.Should().BeOfType<ConflictObjectResult>();
+        }
+
+        [TestMethod]
+        public async Task Import_Success()
+        {
+            var dtos = new List<ResponseDto>
+            {
+                new ResponseDto
+                {
+                    Body = "content",
+                    Method = "GET",
+                    Route = "/route1",
+                    StatusCode = 200
+                },
+                new ResponseDto
+                {
+                    Body = "content",
+                    Method = "GET",
+                    Route = "/route2",
+                    StatusCode = 200
+                }
+            };
+
+            var result = (await _controller.Import(dtos)).Result as OkObjectResult;
+            var resultValue = result.Value as ResponseImportResult;
+            resultValue.Message.Should().Be("Import successful");
+        }
+
+        [TestMethod]
+        public async Task Import_Duplicate()
+        {
+            var dtos = new List<ResponseDto>
+            {
+                new ResponseDto
+                {
+                    Body = "content",
+                    Method = "GET",
+                    Route = "/route",
+                    StatusCode = 200
+                },
+                new ResponseDto
+                {
+                    Body = "content",
+                    Method = "GET",
+                    Route = "/route",
+                    StatusCode = 200
+                }
+            };
+
+            var result = (await _controller.Import(dtos)).Result as OkObjectResult;
+            var resultValue = result.Value as ResponseImportResult;
+
+            resultValue.Message.Should().Be("Error(s) occured during the import");
+            var error = resultValue.Errors.Single();
+            error.Route.Should().Be("/route");
+            error.Method.Should().Be("GET");
+            error.Message.Should().Be("Operation already declared");
         }
 
         [TestMethod]

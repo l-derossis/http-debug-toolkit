@@ -5,7 +5,10 @@ using RequestLogger.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using RequestLogger.Controllers.Results;
 
 namespace RequestLogger.Controllers
 {
@@ -40,7 +43,7 @@ namespace RequestLogger.Controllers
 
             try
             {
-                await _service.RegisterMockedResponse(new List<MockedResponse> { response });
+                await _service.RegisterMockedResponse(response);
             }
             catch (InvalidOperationException e)
             {
@@ -48,6 +51,22 @@ namespace RequestLogger.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("import")]
+        public async Task<ActionResult<ResponseImportResult>> Import([FromBody] IList<ResponseDto> dtos)
+        {
+            var responses = dtos.Select(dto => dto.ToEntity());
+
+            var errors = (await _service.RegisterMockedResponses(responses)).ToList();
+
+            if (errors.Any())
+            {
+                return Ok(new ResponseImportResult("Error(s) occured during the import", errors));                
+            }
+
+            return Ok(new ResponseImportResult("Import successful"));
         }
 
         [HttpGet]

@@ -24,20 +24,17 @@ namespace RequestLogger.Infrastructure.Data
             return _responses.Find(r => r.Route == route && r.Method == httpMethod);
         }
 
-        public async Task RegisterResponses(IEnumerable<MockedResponse> responses)
+        public async Task RegisterResponse(MockedResponse response)
         {
-            foreach (var mockedResponse in responses)
-            {
-                var searchedResponse =
-                    _responses.Find(r => r.Route == mockedResponse.Route && r.Method == mockedResponse.Method);
+            var searchedResponse =
+                _responses.Find(r => r.Route == response.Route && r.Method == response.Method);
 
-                if (searchedResponse != null)
-                {
-                    throw new InvalidOperationException($"Route {mockedResponse.Route} already exists");
-                }
-                 
-                _responses.Add(mockedResponse);
+            if (searchedResponse != null)
+            {
+                throw new InvalidOperationException($"Route {response.Route} already exists");
             }
+             
+            _responses.Add(response);
         }
 
         public async Task<IList<MockedResponse>> GetAllResponses()

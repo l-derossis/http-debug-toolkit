@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RequestLogger.Domain.Entities;
 using RequestLogger.Infrastructure.Data;
+using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace RequestLogger.Tests.Data
 {
@@ -25,7 +22,7 @@ namespace RequestLogger.Tests.Data
             var method = HttpMethod.Get;
 
             var response = CreateResponse(route, method);
-            await _repository.RegisterResponses(new List<MockedResponse>{ response });
+            await _repository.RegisterResponse(response);
 
             var saved = await _repository.GetMockedResponse(method, route);
             saved.Route.Should().Be(route);
@@ -39,7 +36,8 @@ namespace RequestLogger.Tests.Data
             HttpMethod method1 = HttpMethod.Get, method2 = HttpMethod.Post;
             MockedResponse resp1 = CreateResponse(route1, method1), resp2 = CreateResponse(route2, method2);
 
-            await _repository.RegisterResponses(new List<MockedResponse> {resp1, resp2});
+            await _repository.RegisterResponse(resp1);
+            await _repository.RegisterResponse(resp2);
             var savedResp1 = await _repository.GetMockedResponse(method1, route1);
             var savedResp2 = await _repository.GetMockedResponse(method2, route2);
 
@@ -58,7 +56,8 @@ namespace RequestLogger.Tests.Data
             var resp2 = CreateResponse("/route", HttpMethod.Get);
             resp2.Body = "newValue";
 
-            await _repository.RegisterResponses(new List<MockedResponse>{resp1, resp2});
+            await _repository.RegisterResponse(resp1);
+            await _repository.RegisterResponse(resp2);
             await _repository.GetMockedResponse(resp1.Method, resp1.Route);
         }
 
@@ -93,7 +92,8 @@ namespace RequestLogger.Tests.Data
         {
             var response1 = CreateResponse("/route1", HttpMethod.Get);
             var response2 = CreateResponse("/route2", HttpMethod.Get);
-            await _repository.RegisterResponses(new List<MockedResponse> {response1, response2});
+            await _repository.RegisterResponse(response1);
+            await _repository.RegisterResponse(response2);
 
             var responses = await _repository.GetAllResponses();
 
@@ -106,7 +106,7 @@ namespace RequestLogger.Tests.Data
         public async Task GetAllResponses_DeepCopy()
         {
             var response = CreateResponse("/route1", HttpMethod.Get);
-            await _repository.RegisterResponses(new List<MockedResponse> { response});
+            await _repository.RegisterResponse(response);
 
             var responses = await _repository.GetAllResponses();
             responses.First().Route = "/modifiedRoute";

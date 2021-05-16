@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using RequestLogger.Domain.Entities;
+using RequestLogger.Domain.Errors;
 using RequestLogger.Domain.Repositories;
 
 namespace RequestLogger.Domain.Services
@@ -30,13 +31,36 @@ namespace RequestLogger.Domain.Services
         }
 
         /// <summary>
-        /// Register a set of mocked responses. Register a response to an already registered route & method will override the existing value.
+        /// Register a set of mocked responses.
         /// </summary>
-        /// <param name="responses">Enumerable of responses to register</param>
-        /// <returns></returns>
-        public async Task RegisterMockedResponse(IEnumerable<MockedResponse> responses)
+        /// <param name="response">Enumerable of responses to register</param>
+        public async Task RegisterMockedResponse(MockedResponse response)
         {
-            await _repository.RegisterResponses(responses);
+            await _repository.RegisterResponse(response);
+        }
+
+        /// <summary>
+        /// Register multiple responses. Errors do not stop the process, they are all returned as a collection after completion.
+        /// </summary>
+        /// <param name="responses">Responses to register</param>
+        /// <returns>A list of error</returns>
+        public async Task<IEnumerable<EndpointDomainError>> RegisterMockedResponses(IEnumerable<MockedResponse> responses)
+        {
+            var errors = new List<EndpointDomainError>();
+
+            foreach (var response in responses)
+            {
+                try
+                {
+                    await _repository.RegisterResponse(response);
+                }
+                catch (InvalidOperationException e) when (e.Message.Contains("already exists"))
+                {
+                    errors.Add(new EndpointDomainError(response.Route, response.Method.ToString(), "Operation already declared"));
+                }
+            }
+
+            return errors;
         }
 
         /// <summary>
