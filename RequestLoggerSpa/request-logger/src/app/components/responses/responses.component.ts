@@ -109,4 +109,15 @@ export class ResponsesComponent implements OnInit {
       queryParams: params,
     });
   }
+
+  exportRoutes() {
+    this.responsesService.exportResponsesRaw().subscribe((blob) => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
+      a.download = 'responses.json';
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    });
+  }
 }

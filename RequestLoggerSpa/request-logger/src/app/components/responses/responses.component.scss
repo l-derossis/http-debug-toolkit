@@ -6,11 +6,20 @@ mat-drawer-container {
   padding: 15px;
 }
 
-mat-drawer {
+.details-drawer {
   position: fixed;
   width: 50vw;
   display: flex;
   flex-direction: column;
+}
+
+.filters-drawer {
+  width: 20vw;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 10px;
 }
 
 .empty-content {

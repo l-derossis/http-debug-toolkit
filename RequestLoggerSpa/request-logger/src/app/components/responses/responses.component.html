@@ -1,5 +1,13 @@
 <mat-drawer-container *ngIf="responses.length; else empty" fxFill>
 
+    <mat-drawer mode="side" opened="true" class="filters-drawer" fxLayout="column">
+        <div fxFlexAlign="stretch" fxLayout="column" fxLayoutGap="10px">
+            <button mat-raised-button color="primary" (click)="openRouteCreationPopup()" fxFlex> ADD
+            </button>
+            <button mat-raised-button color="primary" (click)="exportRoutes()" fxFlex> EXPORT
+            </button>
+        </div>
+    </mat-drawer>
 
     <mat-drawer-content>
         <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden;" fxFill>
@@ -8,14 +16,10 @@
                 *ngFor="let response of responses; index as i" class="selectable-list-element"
                 (click)="responseSelected(i)">
             </app-method-route>
-
-            <button mat-fab color="primary" (click)="openRouteCreationPopup()" fxFlexAlign="center">
-                <mat-icon>add</mat-icon>
-            </button>
         </div>
     </mat-drawer-content>
 
-    <mat-drawer #drawer mode="over" opened="false" class="drawer" position="end">
+    <mat-drawer #drawer mode="over" opened="false" class="details-drawer" position="end">
         <app-mocked-response-details [response]="selectedResponse"></app-mocked-response-details>
     </mat-drawer>
 </mat-drawer-container>

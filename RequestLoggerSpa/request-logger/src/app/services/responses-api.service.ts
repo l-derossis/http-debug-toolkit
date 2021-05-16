@@ -35,4 +35,10 @@ export class ResponsesApiService {
       )
     );
   }
+
+  exportResponsesRaw(): Observable<Blob> {
+    return this.http.get(this.apiEndpoint, {
+      responseType: 'blob',
+    });
+  }
 }
