@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   FormArray,
   FormGroup,
@@ -8,6 +14,8 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { finalize } from 'rxjs/operators';
 import { MockedResponse } from 'src/app/models/mocked-response';
 
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
@@ -32,6 +40,7 @@ export class ResponseCreationComponent implements OnInit {
   headers = this.requestForm.get('headers') as FormArray;
 
   @Output() routeCreatedEvent = new EventEmitter();
+  @ViewChild('submitButton') submitButton!: MatButton;
 
   constructor(
     private reponsesService: ResponsesApiService,
@@ -41,16 +50,19 @@ export class ResponseCreationComponent implements OnInit {
   ngOnInit(): void {}
 
   submit() {
+    this.submitButton.disabled = true;
+
     let response = this.getModelFromForm();
 
-    console.log(response);
-
-    this.reponsesService.registerResponse(response).subscribe(
-      (_) => {
-        this.routeCreatedEvent.emit();
-      },
-      (error) => this.handleRouteCreationError(error)
-    );
+    this.reponsesService
+      .registerResponse(response)
+      .pipe(finalize(() => (this.submitButton.disabled = false)))
+      .subscribe(
+        (_) => {
+          this.routeCreatedEvent.emit();
+        },
+        (error) => this.handleRouteCreationError(error)
+      );
   }
 
   handleRouteCreationError(error: HttpErrorResponse) {

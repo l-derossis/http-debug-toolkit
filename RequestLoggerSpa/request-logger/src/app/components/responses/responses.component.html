@@ -1,7 +1,5 @@
 <mat-drawer-container *ngIf="responses.length; else empty" fxFill>
-    <mat-drawer #drawer mode="over" opened="false" class="drawer" position="end">
-        <app-mocked-response-details [response]="selectedResponse"></app-mocked-response-details>
-    </mat-drawer>
+
 
     <mat-drawer-content>
         <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden;" fxFill>
@@ -16,6 +14,10 @@
             </button>
         </div>
     </mat-drawer-content>
+
+    <mat-drawer #drawer mode="over" opened="false" class="drawer" position="end">
+        <app-mocked-response-details [response]="selectedResponse"></app-mocked-response-details>
+    </mat-drawer>
 </mat-drawer-container>
 
 <ng-template #empty>
