@@ -6,6 +6,7 @@ import { ResponsesComponent } from './components/responses/responses.component';
 const routes: Routes = [
   { path: 'log', component: RequestLoggerComponent },
   { path: 'responses', component: ResponsesComponent },
+  { path: '', redirectTo: '/responses', pathMatch: 'full' },
 ];
 
 @NgModule({
