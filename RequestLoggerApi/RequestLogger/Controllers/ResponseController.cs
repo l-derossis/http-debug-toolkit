@@ -63,10 +63,10 @@ namespace RequestLogger.Controllers
 
             if (errors.Any())
             {
-                return Ok(new ResponseImportResult("Error(s) occured during the import", errors));                
+                return new ResponseImportResult("Error(s) occured during the import", errors);
             }
 
-            return Ok(new ResponseImportResult("Import successful"));
+            return new ResponseImportResult("Import successful");
         }
 
         [HttpGet]

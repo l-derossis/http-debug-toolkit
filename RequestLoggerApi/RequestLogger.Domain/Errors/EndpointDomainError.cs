@@ -2,9 +2,9 @@
 {
     public class EndpointDomainError : DomainError
     {
-        public readonly string Route;
+        public string Route { get; }
 
-        public readonly string Method;
+        public string Method { get; }
 
         public EndpointDomainError(string route, string method, string message) : base(message)
         {

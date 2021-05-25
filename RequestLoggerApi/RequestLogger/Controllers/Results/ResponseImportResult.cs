@@ -5,11 +5,11 @@ namespace RequestLogger.Controllers.Results
 {
     public class ResponseImportResult
     {
-        public readonly string Message;
+        public string Message { get; }
 
-        public readonly IList<EndpointDomainError> Errors;
+        public List<EndpointDomainError> Errors { get; }
 
-        public ResponseImportResult(string message, IList<EndpointDomainError> errors = null)
+        public ResponseImportResult(string message, List<EndpointDomainError> errors = null)
         {
             Message = message;
             Errors = errors ?? new List<EndpointDomainError>();

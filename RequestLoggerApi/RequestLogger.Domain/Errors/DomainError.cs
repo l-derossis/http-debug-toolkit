@@ -2,7 +2,7 @@
 {
     public class DomainError
     {
-        public readonly string Message;
+        public string Message { get; }
 
         public DomainError(string message)
         {
