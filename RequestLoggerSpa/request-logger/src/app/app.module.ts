@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MethodRouteComponent } from './components/shared/method-route/method-route.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
@@ -61,6 +62,7 @@ import { ResponsesImportComponent } from './components/responses-import/response
     MatDialogModule,
     MatSidenavModule,
     MatStepperModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

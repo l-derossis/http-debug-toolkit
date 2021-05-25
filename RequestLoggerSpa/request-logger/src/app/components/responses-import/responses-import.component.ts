@@ -1,4 +1,4 @@
-import { CdkStep, StepperSelectionEvent } from '@angular/cdk/stepper';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import {
   Component,
   EventEmitter,
@@ -7,8 +7,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatStep } from '@angular/material/stepper';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { distinct, startWith, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { MockedResponse } from 'src/app/models/mocked-response';
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 
@@ -25,7 +25,7 @@ export class ResponsesImportComponent implements OnInit {
   // Step 1
   files: File[] = [];
   fileLoadingSubject = new Subject<boolean>();
-  fileLoading$ = this.fileLoadingSubject.pipe(distinct());
+  fileLoading$ = this.fileLoadingSubject.pipe(distinctUntilChanged());
 
   // Step 2
   fileIsValid: boolean = false;
@@ -33,7 +33,9 @@ export class ResponsesImportComponent implements OnInit {
 
   // Step 3
   responsesUploadingSubject = new Subject<boolean>();
-  responsesUploading$ = this.responsesUploadingSubject.pipe(distinct());
+  responsesUploading$ = this.responsesUploadingSubject.pipe(
+    distinctUntilChanged()
+  );
   uploadResultMessage: string | undefined;
   importSuccessful: boolean = false;
   errors: string[] = [];

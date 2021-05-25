@@ -1,4 +1,5 @@
 <mat-horizontal-stepper linear #stepper (selectionChange)="onStepChange($event)">
+    <!-- Step 1: Import file -->
     <mat-step #fileUploadStep [completed]="false">
         <ng-template matStepLabel>Select a file</ng-template>
         <div class="step-container">
@@ -13,9 +14,11 @@
             </div>
         </div>
     </mat-step>
+
+    <!-- Step 2: Validate inputs -->
     <mat-step #dataValidationStep>
         <ng-template matStepLabel>Validate content</ng-template>
-        <div class="step-container">
+        <div class="step-container" *ngIf="!(fileLoading$ | async); else loader">
             <p>The following operations will be imported: </p>
             <div class="routes" *ngIf="fileIsValid; else invalidFile">
                 <app-method-route *ngFor="let response of responses" Route="{{response.route}}"
@@ -30,14 +33,26 @@
                     [disabled]="!responses || responses.length == 0">Next</button>
             </div>
         </div>
+
+
     </mat-step>
+
+    <!-- Step 3: Upload results -->
     <mat-step #importStep>
         <ng-template matStepLabel>Import results</ng-template>
-        <p id="uploadMessage">{{uploadResultMessage}}</p>
-        <p class="error" *ngFor="let error of errors">{{error}}</p>
-        <div fxFill fxLayout="row" fxLayoutAlign="space-between center">
-            <button mat-button color="primary" matStepperPrevious>Back</button>
-            <button mat-button color="primary" *ngIf="errors.length == 0" (click)="close()">Done</button>
+        <div *ngIf="!(responsesUploading$ |async) else loader">
+            <p id="uploadMessage">{{uploadResultMessage}}</p>
+            <p class="error" *ngFor="let error of errors">{{error}}</p>
+            <div fxFill fxLayout="row" fxLayoutAlign="space-between center">
+                <button mat-button color="primary" matStepperPrevious>Back</button>
+                <button mat-button color="primary" *ngIf="errors.length == 0" (click)="close()">Done</button>
+            </div>
         </div>
     </mat-step>
 </mat-horizontal-stepper>
+
+<ng-template #loader>
+    <div fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+    </div>
+</ng-template>
