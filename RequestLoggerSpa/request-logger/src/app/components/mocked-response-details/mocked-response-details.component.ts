@@ -9,6 +9,12 @@ import { MockedResponse } from 'src/app/models/mocked-response';
 export class MockedResponseDetailsComponent implements OnInit {
   @Input() response: MockedResponse | undefined = undefined;
 
+  get displayHeaders(): boolean {
+    return this.response?.headers
+      ? Object.keys(this.response?.headers).length > 0
+      : false;
+  }
+
   constructor() {}
 
   ngOnInit(): void {}

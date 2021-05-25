@@ -1,15 +1,32 @@
 export class MockedResponse {
-  Route: string = '';
+  constructor(
+    route: string,
+    method: string,
+    statusCode: number,
+    body: string | undefined = undefined,
+    headers: any | undefined = undefined
+  ) {
+    if (!route || !method || !statusCode) {
+      throw new Error('Route, method and status code must be provided');
+    }
+    this.route = route;
+    this.method = method;
+    this.statusCode = statusCode;
+    this.body = body;
+    this.headers = headers;
+  }
 
-  Method: string = '';
+  route: string = '';
 
-  Headers: any = {};
+  method: string = '';
 
-  Body: string = '';
+  headers: any = {};
 
-  StatusCode: number = 200;
+  body: string | undefined;
+
+  statusCode: number = 200;
 
   addHeader(key: string, value: string) {
-    this.Headers[key] = value;
+    this.headers[key] = value;
   }
 }

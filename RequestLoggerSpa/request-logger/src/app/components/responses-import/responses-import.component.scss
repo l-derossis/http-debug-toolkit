@@ -1,0 +1,25 @@
+ngx-dropzone {
+  min-width: 200px;
+  min-height: 200px;
+  margin-top: 15px;
+}
+
+.step-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.routes {
+  max-height: 50vh;
+  overflow: auto;
+  padding: 5px;
+}
+
+.previous {
+  margin-top: 15px;
+  align-self: flex-start;
+}
+
+.navigation-panel {
+  margin-top: 15px;
+}

@@ -7,6 +7,7 @@ import { ResponseCreationComponent } from '../response-creation/response-creatio
 import { MatSidenav } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ResponsesImportComponent } from '../responses-import/responses-import.component';
 
 @Component({
   selector: 'app-responses',
@@ -46,8 +47,8 @@ export class ResponsesComponent implements OnInit {
   responseSelected(index: number) {
     this.router.navigate([], {
       queryParams: {
-        route: this.responses[index].Route,
-        method: this.responses[index].Method,
+        route: this.responses[index].route,
+        method: this.responses[index].method,
       },
     });
   }
@@ -55,6 +56,14 @@ export class ResponsesComponent implements OnInit {
   openRouteCreationPopup(): void {
     const dialogRef = this.dialog.open(ResponseCreationComponent);
     dialogRef.componentInstance.routeCreatedEvent.subscribe((_) => {
+      dialogRef.close();
+      this.loadRoutes();
+    });
+  }
+
+  openResponsesImportPopup(): void {
+    const dialogRef = this.dialog.open(ResponsesImportComponent);
+    dialogRef.componentInstance.done.subscribe((_) => {
       dialogRef.close();
       this.loadRoutes();
     });
@@ -92,8 +101,8 @@ export class ResponsesComponent implements OnInit {
 
     const response = this.responses?.find(
       (r) =>
-        r.Route.toLowerCase() == route.toLowerCase() &&
-        r.Method.toLowerCase() == method.toLowerCase()
+        r.route.toLowerCase() == route.toLowerCase() &&
+        r.method.toLowerCase() == method.toLowerCase()
     );
 
     return response;

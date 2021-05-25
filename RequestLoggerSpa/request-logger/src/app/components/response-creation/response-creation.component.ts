@@ -72,11 +72,13 @@ export class ResponseCreationComponent implements OnInit {
   }
 
   getModelFromForm(): MockedResponse {
-    let response = new MockedResponse();
-    response.Method = this.requestForm.get('method')?.value;
-    response.Route = this.requestForm.get('route')?.value;
-    response.Body = this.requestForm.get('body')?.value;
-    response.StatusCode = this.requestForm.get('statusCode')?.value;
+    let response = new MockedResponse(
+      this.requestForm.get('route')?.value,
+      this.requestForm.get('method')?.value,
+      this.requestForm.get('statusCode')?.value,
+      this.requestForm.get('body')?.value,
+      {}
+    );
 
     this.headers.controls.forEach((header) => {
       let key = header.get('key')?.value;

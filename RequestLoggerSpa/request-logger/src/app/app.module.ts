@@ -5,13 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
-import { ResponsesComponent } from './components/responses/responses.component';
-import { ResponseCreationComponent } from './components/response-creation/response-creation.component';
-import { MockedResponseDetailsComponent } from './components/mocked-response-details/mocked-response-details.component';
-
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,6 +18,17 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MethodRouteComponent } from './components/shared/method-route/method-route.component';
+import { MatStepperModule } from '@angular/material/stepper';
+
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
+import { ResponsesComponent } from './components/responses/responses.component';
+import { ResponseCreationComponent } from './components/response-creation/response-creation.component';
+import { MockedResponseDetailsComponent } from './components/mocked-response-details/mocked-response-details.component';
+import { ResponsesImportComponent } from './components/responses-import/responses-import.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +38,7 @@ import { MethodRouteComponent } from './components/shared/method-route/method-ro
     ResponseCreationComponent,
     MockedResponseDetailsComponent,
     MethodRouteComponent,
+    ResponsesImportComponent,
   ],
   imports: [
     HttpClientModule,
@@ -42,6 +47,7 @@ import { MethodRouteComponent } from './components/shared/method-route/method-ro
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    NgxDropzoneModule,
     MatToolbarModule,
     MatExpansionModule,
     MatFormFieldModule,
@@ -54,6 +60,7 @@ import { MethodRouteComponent } from './components/shared/method-route/method-ro
     MatListModule,
     MatDialogModule,
     MatSidenavModule,
+    MatStepperModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
