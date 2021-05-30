@@ -100,4 +100,4 @@ _ReSharper*/
 /node_modules
 
 # Don't commit the built SPA in wwwroot, it will be rebuilt when necessary
-**/wwwroot/
+**/wwwroot/*
