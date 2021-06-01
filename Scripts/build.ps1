@@ -31,8 +31,9 @@ if($Push) {
     docker push $image
 }
 
+cd .\Scripts
+
 if($Run) {
     docker run -p 80:80 $image
 }
 
-cd .\Scripts
