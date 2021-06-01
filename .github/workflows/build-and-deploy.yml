@@ -39,7 +39,9 @@ jobs:
           npm run build-prod
 
       - name: Copy SPA dist to wwwroot
-        run: mv ${{env.SPA_PATH}}/dist/request-logger/* ${{env.API_PATH}}/wwwroot/
+        run: |
+          mkdir -p ${{env.API_PATH}}/wwwroot/
+          mv ${{env.SPA_PATH}}/dist/request-logger/* ${{env.API_PATH}}/wwwroot/
 
       - name: Publish API
         run: dotnet publish ${{env.API_PATH}}
