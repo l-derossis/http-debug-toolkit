@@ -30,3 +30,9 @@ jobs:
         run: |
           cd $SPA_PATH
           npm run build --prod
+
+      - name: Store dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: SPA dist
+          path: dist/
