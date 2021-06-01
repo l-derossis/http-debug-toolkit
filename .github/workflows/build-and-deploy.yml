@@ -1,0 +1,32 @@
+name: learn-github-actions
+
+on:
+  push:
+    branches: [feature/docker-init]
+
+env:
+  SPA_PATH: "./RequestLoggerSpa/request-logger"
+  NODE_VERSION: 14
+
+jobs:
+  build-spa:
+    name: Build Angular SPA
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node ${{env.NODE_VERSION}}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install npm packages
+        run: |
+          cd $SPA_PATH
+          npm ci
+
+      - name: Build SPA
+        run: |
+          cd $SPA_PATH
+          npm run build --prod
