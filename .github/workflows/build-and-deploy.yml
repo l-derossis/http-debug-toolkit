@@ -39,10 +39,10 @@ jobs:
           npm run build-prod
 
       - name: Copy SPA dist to wwwroot
-        run: mv ${{env.SPA_PATH}}/dist/request-logger/* ${{API_PATH}}/wwwroot/
+        run: mv ${{env.SPA_PATH}}/dist/request-logger/* ${{env.API_PATH}}/wwwroot/
 
       - name: Publish API
-        run: dotnet publish ${{API_PATH}}
+        run: dotnet publish ${{env.API_PATH}}
 
       - name: Store output
         uses: actions/upload-artifact@v2
