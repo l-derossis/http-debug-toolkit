@@ -6,11 +6,13 @@ on:
 
 env:
   SPA_PATH: "./RequestLoggerSpa/request-logger"
+  API_PATH: "./RequestLoggerApi/RequestLogger"
   NODE_VERSION: 14
+  DOTNET_VERSION: "5.0.203"
 
 jobs:
   build-spa:
-    name: Build Angular SPA
+    name: Build
     runs-on: ubuntu-20.04
 
     steps:
@@ -20,6 +22,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
+
+      - name: Setup .NET 5 SDK ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install npm packages
         run: |
@@ -31,8 +38,14 @@ jobs:
           cd $SPA_PATH
           npm run build-prod
 
-      - name: Store dist
+      - name: Copy SPA dist to wwwroot
+        run: mv ${{env.SPA_PATH}}/dist/request-logger/* ${{API_PATH}}/wwwroot/
+
+      - name: Publish API
+        run: dotnet publish ${{API_PATH}}
+
+      - name: Store output
         uses: actions/upload-artifact@v2
         with:
-          name: SPA dist
-          path: ${{env.SPA_PATH}}/dist/
+          name: API
+          path: ${{env.API_PATH}}/bin/Release/net5.0/publish
