@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: API
-          path: ${{env.API_PATH}}/bin/Release/net5.0/publish
+          path: ${{env.API_PATH}}/bin/Release/net5.0/publish/*
