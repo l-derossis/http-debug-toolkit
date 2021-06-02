@@ -58,12 +58,10 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_LOGIN }}
           password: ${{ secrets.DOCKER_HUB_HDT_SECRET }}
 
-      - name: Move to API folder
-        run: cd ${{env.API_PATH}}
-
       - name: Build and push Docker image
         #if: github.ref == 'refs/heads/develop'
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: lderossis/hdt:development
+          working-directory: $API_PATH
