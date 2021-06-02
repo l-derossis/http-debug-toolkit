@@ -2,7 +2,9 @@ name: learn-github-actions
 
 on:
   push:
-    branches: [feature/docker-init]
+    branches:
+      - develop
+      - master
 
 env:
   SPA_PATH: "./RequestLoggerSpa/request-logger"
@@ -59,9 +61,17 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_HDT_SECRET }}
 
       - name: Build and push Docker image
-        #if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/develop'
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: lderossis/hdt:development
+          context: ${{env.API_PATH}}
+
+      - name: Build and push Docker image
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: lderossis/hdt:latest
           context: ${{env.API_PATH}}
