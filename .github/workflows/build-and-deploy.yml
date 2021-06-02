@@ -64,3 +64,4 @@ jobs:
         with:
           push: true
           tags: lderossis/hdt:development
+          file: ${{env.API_PATH}}/Dockerfile
