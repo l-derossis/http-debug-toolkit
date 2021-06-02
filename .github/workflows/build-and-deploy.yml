@@ -64,4 +64,4 @@ jobs:
         with:
           push: true
           tags: lderossis/hdt:development
-          context: $API_PATH
+          context: ${{env.API_PATH}}
