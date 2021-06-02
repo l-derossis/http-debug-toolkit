@@ -18,6 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Use Node ${{env.NODE_VERSION}}
         uses: actions/setup-node@v2
         with:
@@ -58,10 +64,12 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_LOGIN }}
           password: ${{ secrets.DOCKER_HUB_HDT_SECRET }}
 
+      - name: Move to API folder
+        run: cd ${{env.API_PATH}}
+
       - name: Build and push Docker image
         #if: github.ref == 'refs/heads/develop'
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: lderossis/hdt:development
-          file: ${{env.API_PATH}}/Dockerfile
