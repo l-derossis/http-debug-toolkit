@@ -17,8 +17,5 @@ export class MockedResponseDetailsComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    // test line to trigger SonarCloud
-    console.log('init');
-  }
+  ngOnInit(): void {}
 }
