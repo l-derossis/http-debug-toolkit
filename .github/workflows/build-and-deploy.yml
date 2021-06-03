@@ -1,6 +1,10 @@
 name: learn-github-actions
 
-on: push
+on:
+  push:
+    branches:
+      - develop
+      - master
 
 env:
   SPA_PATH: "./RequestLoggerSpa/request-logger"
