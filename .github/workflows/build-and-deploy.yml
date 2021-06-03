@@ -20,6 +20,9 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ${{env.SPA_PATH}}/src
+          arg: >
+            -Dsonar.organization=lderossis
+            -Dsonar.projectKey=l-derossis_http-debug-toolkit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
