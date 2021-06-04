@@ -9,7 +9,11 @@
     <span class="label">HEADERS</span>
 
     <ng-container *ngIf="displayHeaders; else noHeader">
-        <table fxFill>
+        <table>
+            <thead>
+                <th scope="col">Key</th>
+                <th scope="col">Value</th>
+            </thead>
             <tbody>
                 <tr *ngFor="let pair of response?.headers | keyvalue">
                     <td>{{pair.key}}</td>
