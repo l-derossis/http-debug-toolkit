@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSelectionList } from '@angular/material/list';
 import { MockedResponse } from 'src/app/models/mocked-response';
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -99,13 +98,11 @@ export class ResponsesComponent implements OnInit {
 
     if (!route || !method) return undefined;
 
-    const response = this.responses?.find(
+    return this.responses?.find(
       (r) =>
         r.route.toLowerCase() == route.toLowerCase() &&
         r.method.toLowerCase() == method.toLowerCase()
     );
-
-    return response;
   }
 
   clearRouteMethodParams() {

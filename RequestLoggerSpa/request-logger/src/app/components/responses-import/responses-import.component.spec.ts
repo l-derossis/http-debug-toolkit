@@ -7,7 +7,7 @@ import { ResponsesApiService } from 'src/app/services/responses-api.service';
 
 import { ResponsesImportComponent } from './responses-import.component';
 
-fdescribe('ResponsesImportComponent', () => {
+describe('ResponsesImportComponent', () => {
   let component: ResponsesImportComponent;
   let fixture: ComponentFixture<ResponsesImportComponent>;
 

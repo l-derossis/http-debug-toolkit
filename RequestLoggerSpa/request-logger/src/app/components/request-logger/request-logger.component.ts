@@ -7,7 +7,7 @@ import { SignalRService } from 'src/app/services/signal-r.service';
   styleUrls: ['./request-logger.component.scss'],
 })
 export class RequestLoggerComponent implements OnInit {
-  requests: String[] = [];
+  requests: string[] = [];
 
   constructor(private signalrService: SignalRService) {}
 

@@ -17,7 +17,7 @@ import { ResponsesApiService } from 'src/app/services/responses-api.service';
   templateUrl: './responses-import.component.html',
   styleUrls: ['./responses-import.component.scss'],
 })
-export class ResponsesImportComponent implements OnInit {
+export class ResponsesImportComponent {
   @ViewChild('fileUploadStep') fileUploadStep!: MatStep;
   @ViewChild('dataValidationStep') dataValidationStep!: MatStep;
   @Output() done = new EventEmitter();
@@ -41,8 +41,6 @@ export class ResponsesImportComponent implements OnInit {
   errors: string[] = [];
 
   constructor(private apiService: ResponsesApiService) {}
-
-  ngOnInit(): void {}
 
   onSelect(event: any) {
     console.log(event);
