@@ -1,11 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatStep } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
