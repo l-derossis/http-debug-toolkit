@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MockedResponse } from 'src/app/models/mocked-response';
 
 @Component({
@@ -6,7 +6,7 @@ import { MockedResponse } from 'src/app/models/mocked-response';
   templateUrl: './mocked-response-details.component.html',
   styleUrls: ['./mocked-response-details.component.scss'],
 })
-export class MockedResponseDetailsComponent implements OnInit {
+export class MockedResponseDetailsComponent {
   @Input() response: MockedResponse | undefined = undefined;
 
   get displayHeaders(): boolean {
@@ -14,8 +14,4 @@ export class MockedResponseDetailsComponent implements OnInit {
       ? Object.keys(this.response?.headers).length > 0
       : false;
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

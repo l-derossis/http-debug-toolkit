@@ -25,7 +25,7 @@ import { ResponsesApiService } from 'src/app/services/responses-api.service';
   templateUrl: './response-creation.component.html',
   styleUrls: ['./response-creation.component.scss'],
 })
-export class ResponseCreationComponent implements OnInit {
+export class ResponseCreationComponent {
   requestForm: FormGroup = this.formBuilder.group({
     route: this.formBuilder.control('/', [
       Validators.required,
@@ -46,8 +46,6 @@ export class ResponseCreationComponent implements OnInit {
     private reponsesService: ResponsesApiService,
     private formBuilder: FormBuilder
   ) {}
-
-  ngOnInit(): void {}
 
   submit() {
     this.submitButton.disabled = true;

@@ -5,13 +5,12 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { ResponsesApiService } from './responses-api.service';
 import { MockedResponse } from '../models/mocked-response';
 
 describe('ResponsesApiService', () => {
-  let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
 
   let service: ResponsesApiService;
@@ -22,7 +21,7 @@ describe('ResponsesApiService', () => {
     });
 
     // Inject the http service and test controller for each test
-    httpClient = TestBed.inject(HttpClient);
+    TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ResponsesApiService);
   });

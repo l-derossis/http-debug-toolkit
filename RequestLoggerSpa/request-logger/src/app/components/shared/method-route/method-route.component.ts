@@ -6,11 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./method-route.component.scss'],
   host: {},
 })
-export class MethodRouteComponent implements OnInit {
+export class MethodRouteComponent {
   @Input() Route: string = '';
   @Input() Method: string = '';
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }
