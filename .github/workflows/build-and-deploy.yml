@@ -1,4 +1,4 @@
-name: learn-github-actions
+name: Build and deploy
 
 on:
   push:
@@ -13,25 +13,6 @@ env:
   DOTNET_VERSION: "5.0.203"
 
 jobs:
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: ${{env.SPA_PATH}}
-          args: >
-            -Dsonar.organization=lderossis
-            -Dsonar.projectKey=l-derossis_http-debug-toolkit
-            -Dsonar.sources=src/
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
   build-spa:
     name: Build
     runs-on: ubuntu-20.04
