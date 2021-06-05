@@ -2,9 +2,9 @@ name: Build and deploy
 
 on:
   push:
-    branches:
-      - develop
-      - master
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
 
 env:
   SPA_PATH: "./RequestLoggerSpa/request-logger"
@@ -35,10 +35,15 @@ jobs:
           cd $SPA_PATH
           npm ci
 
+      - name: Test SPA
+        run: |
+          cd $SPA_PATH
+          npm run test:prod
+
       - name: Build SPA
         run: |
           cd $SPA_PATH
-          npm run build-prod
+          npm run build:prod
 
       - name: Copy SPA dist to wwwroot
         run: |
