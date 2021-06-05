@@ -5,6 +5,9 @@ on:
     branches:
       - "**"
 
+env:
+  SPA_PATH: "./RequestLoggerSpa/request-logger"
+
 jobs:
   sonarcloud:
     name: SonarCloud
