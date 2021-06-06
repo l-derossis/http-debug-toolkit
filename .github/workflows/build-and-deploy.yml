@@ -2,7 +2,7 @@ name: Build and deploy
 
 on:
   push:
-    branches: [master, develop]
+    branches: ["**"]
   pull_request:
     branches: [master, develop]
 
@@ -34,15 +34,8 @@ jobs:
         run: |
           cd $SPA_PATH
           npm ci
-
-      - name: Test SPA
-        run: |
-          cd $SPA_PATH
           npm run test:prod
-
-      - name: Build SPA
-        run: |
-          cd $SPA_PATH
+          npm run lint
           npm run build:prod
 
       - name: Copy SPA dist to wwwroot
@@ -80,3 +73,16 @@ jobs:
           push: true
           tags: lderossis/hdt:latest
           context: ${{env.API_PATH}}
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ${{env.SPA_PATH}}
+          args: >
+            -Dsonar.organization=lderossis
+            -Dsonar.projectKey=l-derossis_http-debug-toolkit
+            -Dsonar.sources=src/
+            -Dsonar.javascript.lcov.reportPaths=coverage/request-logger/lcov.info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
