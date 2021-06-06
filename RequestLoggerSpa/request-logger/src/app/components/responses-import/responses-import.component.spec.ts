@@ -72,6 +72,11 @@ describe('ResponsesImportComponent', () => {
     component.fileLoading$.subscribe((loading) => {
       expect(component.fileIsValid).toBe(!loading);
       if (!loading) {
+        fixture.detectChanges();
+        const routes = fixture.debugElement.queryAll(
+          By.css('app-method-route')
+        );
+        expect(routes.length).toBe(3);
         expect(component.responses?.length).toBe(3);
       }
     });
@@ -80,16 +85,6 @@ describe('ResponsesImportComponent', () => {
   });
 
   // STEP 2 - Input validation
-
-  it('should display the imported responses', () => {
-    component.responses = buildResponses(3);
-    component.fileIsValid = true;
-
-    fixture.detectChanges();
-    const routes = fixture.debugElement.queryAll(By.css('app-method-route'));
-
-    expect(routes.length).toBe(3);
-  });
 
   it('should display an error on invalid input', () => {
     component.fileIsValid = false;
