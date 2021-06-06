@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class SignalRService {
   private hubConnection: signalR.HubConnection | undefined;
 
-  public startConnection = () => {
+  public startConnection = (): void => {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.apiUrl}/requestsHub`)
       .build();
@@ -19,7 +19,7 @@ export class SignalRService {
       .catch((err) => console.log('Error while starting connection: ' + err));
   };
 
-  public addRequestsListener(callback: (request: string) => any) {
+  public addRequestsListener(callback: (request: string) => any): void {
     if (!this.hubConnection) {
       throw Error('Hub is not initialized');
     }

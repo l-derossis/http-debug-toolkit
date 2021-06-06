@@ -8,9 +8,8 @@ describe('RequestLoggerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RequestLoggerComponent ]
-    })
-    .compileComponents();
+      declarations: [RequestLoggerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
