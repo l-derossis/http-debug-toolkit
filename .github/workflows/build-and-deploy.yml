@@ -44,7 +44,9 @@ jobs:
           mv ${{env.SPA_PATH}}/dist/request-logger/* ${{env.API_PATH}}/wwwroot/
 
       - name: Publish API
-        run: dotnet publish ${{env.API_PATH}} -c Release
+        run: |
+          dotnet test ${{env.API_PATH}}
+          dotnet publish ${{env.API_PATH}} -c Release
 
       - name: Store output
         uses: actions/upload-artifact@v2
