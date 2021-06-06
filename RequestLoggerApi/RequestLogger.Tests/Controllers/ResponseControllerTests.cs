@@ -99,9 +99,9 @@ namespace RequestLogger.Tests.Controllers
                 }
             };
 
-            var result = (await _controller.Import(dtos)).Result as OkObjectResult;
-            var resultValue = result.Value as ResponseImportResult;
-            resultValue.Message.Should().Be("Import successful");
+            var result = await _controller.Import(dtos);
+
+            result.Value.Message.Should().Be("Import successful");
         }
 
         [TestMethod]
@@ -125,8 +125,7 @@ namespace RequestLogger.Tests.Controllers
                 }
             };
 
-            var result = (await _controller.Import(dtos)).Result as OkObjectResult;
-            var resultValue = result.Value as ResponseImportResult;
+            var resultValue = (await _controller.Import(dtos)).Value;
 
             resultValue.Message.Should().Be("Error(s) occured during the import");
             var error = resultValue.Errors.Single();
