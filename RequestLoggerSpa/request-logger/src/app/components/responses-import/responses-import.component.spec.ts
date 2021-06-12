@@ -11,11 +11,10 @@ describe('ResponsesImportComponent', () => {
   let component: ResponsesImportComponent;
   let fixture: ComponentFixture<ResponsesImportComponent>;
 
-  let serviceStub: Partial<ResponsesApiService>;
   let registerResponsesSuccessful = true;
 
-  serviceStub = {
-    registerResponses: (_: MockedResponse[]): Observable<any> => {
+  const serviceStub: Partial<ResponsesApiService> = {
+    registerResponses: (): Observable<any> => {
       return registerResponsesSuccessful
         ? of({ message: 'Import successful', errors: [] })
         : of({
@@ -58,7 +57,7 @@ describe('ResponsesImportComponent', () => {
   it('should not parse an invalid file', () => {
     const file = new File([''], 'responses.json');
     component.files.push(file);
-    var stepEvent = new StepperSelectionEvent();
+    const stepEvent = new StepperSelectionEvent();
     stepEvent.selectedIndex = 1;
 
     component.onStepChange(stepEvent);
@@ -73,6 +72,11 @@ describe('ResponsesImportComponent', () => {
     component.fileLoading$.subscribe((loading) => {
       expect(component.fileIsValid).toBe(!loading);
       if (!loading) {
+        fixture.detectChanges();
+        const routes = fixture.debugElement.queryAll(
+          By.css('app-method-route')
+        );
+        expect(routes.length).toBe(3);
         expect(component.responses?.length).toBe(3);
       }
     });
@@ -81,16 +85,6 @@ describe('ResponsesImportComponent', () => {
   });
 
   // STEP 2 - Input validation
-
-  it('should display the imported responses', () => {
-    component.responses = buildResponses(3);
-    component.fileIsValid = true;
-
-    fixture.detectChanges();
-    const routes = fixture.debugElement.queryAll(By.css('app-method-route'));
-
-    expect(routes.length).toBe(3);
-  });
 
   it('should display an error on invalid input', () => {
     component.fileIsValid = false;
@@ -143,7 +137,7 @@ describe('ResponsesImportComponent', () => {
   }
 
   function buildResponses(count: number): MockedResponse[] {
-    let responses: MockedResponse[] = [];
+    const responses: MockedResponse[] = [];
 
     for (let i = 0; i < count; ++i) {
       responses.push(new MockedResponse(`/route${i}`, 'GET', 200));

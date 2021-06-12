@@ -7,6 +7,7 @@ import {
   Validators,
   ValidatorFn,
   AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { finalize } from 'rxjs/operators';
@@ -23,7 +24,7 @@ export class ResponseCreationComponent {
   requestForm: FormGroup = this.formBuilder.group({
     route: this.formBuilder.control('/', [
       Validators.required,
-      urlValidator(/^\/[-a-zA-Z0-9@:%_+.~#?&=\/]*$/i),
+      urlValidator(/^[-a-zA-Z0-9@:%_+.~#?&=]*$/i),
     ]),
     method: ['GET', [Validators.required]],
     body: [],
@@ -41,30 +42,30 @@ export class ResponseCreationComponent {
     private formBuilder: FormBuilder
   ) {}
 
-  submit() {
+  submit(): void {
     this.submitButton.disabled = true;
 
-    let response = this.getModelFromForm();
+    const response = this.getModelFromForm();
 
     this.reponsesService
       .registerResponse(response)
       .pipe(finalize(() => (this.submitButton.disabled = false)))
       .subscribe(
-        (_) => {
+        () => {
           this.routeCreatedEvent.emit();
         },
         (error) => this.handleRouteCreationError(error)
       );
   }
 
-  handleRouteCreationError(error: HttpErrorResponse) {
+  handleRouteCreationError(error: HttpErrorResponse): void {
     if (error.status == 409) {
       this.requestForm.get('route')?.setErrors({ duplicate: true });
     }
   }
 
   getModelFromForm(): MockedResponse {
-    let response = new MockedResponse(
+    const response = new MockedResponse(
       this.requestForm.get('route')?.value,
       this.requestForm.get('method')?.value,
       this.requestForm.get('statusCode')?.value,
@@ -73,8 +74,8 @@ export class ResponseCreationComponent {
     );
 
     this.headers.controls.forEach((header) => {
-      let key = header.get('key')?.value;
-      let value = header.get('value')?.value;
+      const key = header.get('key')?.value;
+      const value = header.get('value')?.value;
       if (key && value) {
         response.addHeader(key, value);
       }
@@ -90,15 +91,15 @@ export class ResponseCreationComponent {
     });
   }
 
-  addHeader() {
+  addHeader(): void {
     this.headers.push(this.createHeader());
   }
 
-  deleteHeader(i: number) {
+  deleteHeader(i: number): void {
     this.headers.removeAt(i);
   }
 
-  onHeaderInput(index: number) {
+  onHeaderInput(index: number): void {
     // We want to add a new line when the user starts typing something in the last header field
     // in order to avoid having to add an 'add' button
     if (
@@ -112,7 +113,7 @@ export class ResponseCreationComponent {
 }
 
 export function urlValidator(urlRegex: RegExp): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
+  return (control: AbstractControl): ValidationErrors | null => {
     const valid = urlRegex.test(control.value);
     return valid ? null : { invalidUrl: { value: control.value } };
   };

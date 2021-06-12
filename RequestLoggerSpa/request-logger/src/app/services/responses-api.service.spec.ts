@@ -37,9 +37,9 @@ describe('ResponsesApiService', () => {
   it('should register a valid mocked response', () => {
     const response = new MockedResponse('/route', 'GET', 200, '', null);
 
-    service.registerResponse(response).subscribe((_) => expect(true));
+    service.registerResponse(response).subscribe(() => expect(true));
 
-    let req = httpTestingController.expectOne(
+    const req = httpTestingController.expectOne(
       'https://localhost:5001/api/configuration/responses'
     );
     expect(req.request.method).toBe('POST');
@@ -52,9 +52,9 @@ describe('ResponsesApiService', () => {
       new MockedResponse('/route2', 'GET', 200, '', null),
     ];
 
-    service.registerResponses(responses).subscribe((_) => expect(true));
+    service.registerResponses(responses).subscribe(() => expect(true));
 
-    let req = httpTestingController.expectOne(
+    const req = httpTestingController.expectOne(
       'https://localhost:5001/api/configuration/responses/import'
     );
     expect(req.request.method).toBe('POST');
@@ -68,7 +68,7 @@ describe('ResponsesApiService', () => {
       expect(r).toHaveSize(3);
     });
 
-    let req = httpTestingController.expectOne(
+    const req = httpTestingController.expectOne(
       'https://localhost:5001/api/configuration/responses'
     );
     expect(req.request.method).toBe('GET');
@@ -77,7 +77,7 @@ describe('ResponsesApiService', () => {
 });
 
 function buildResponses(count: number): any {
-  let responses: any[] = [];
+  const responses: any[] = [];
 
   for (let i = 0; i < count; ++i) {
     responses.push({

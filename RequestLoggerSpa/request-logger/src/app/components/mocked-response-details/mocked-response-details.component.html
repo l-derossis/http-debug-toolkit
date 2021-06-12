@@ -1,33 +1,36 @@
-<app-method-route Method={{response?.method}} Route={{response?.route}}></app-method-route>
+<app-method-route
+  Method="{{ response?.method }}"
+  Route="{{ response?.route }}"
+></app-method-route>
 
 <div fxLayout="row" fxLayoutGap="10px" class="section">
-    <span class="label">STATUS CODE:</span>
-    <span class="value">{{response?.statusCode}}</span>
+  <span class="label">STATUS CODE:</span>
+  <span class="value">{{ response?.statusCode }}</span>
 </div>
 
 <div fxLayout="column" fxLayoutGap="10px" class="section">
-    <span class="label">HEADERS</span>
+  <span class="label">HEADERS</span>
 
-    <ng-container *ngIf="displayHeaders; else noHeader">
-        <table aria-label="Response headers">
-            <thead>
-                <th scope="col">Key</th>
-                <th scope="col">Value</th>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pair of response?.headers | keyvalue">
-                    <td>{{pair.key}}</td>
-                    <td>{{pair.value}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </ng-container>
-    <ng-template #noHeader>
-        <span>No header defined</span>
-    </ng-template>
+  <ng-container *ngIf="displayHeaders; else noHeader">
+    <table aria-label="Response headers">
+      <thead>
+        <th scope="col">Key</th>
+        <th scope="col">Value</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pair of response?.headers | keyvalue">
+          <td>{{ pair.key }}</td>
+          <td>{{ pair.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #noHeader>
+    <span>No header defined</span>
+  </ng-template>
 </div>
 
 <div class="section" fxLayout="column" fxFlex>
-    <span class="label">BODY</span>
-    <div class="body" fxFlex>{{response?.body}}</div>
+  <span class="label">BODY</span>
+  <div class="body" fxFlex>{{ response?.body }}</div>
 </div>

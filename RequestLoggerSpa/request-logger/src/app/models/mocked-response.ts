@@ -16,17 +16,17 @@ export class MockedResponse {
     this.headers = headers;
   }
 
-  route: string = '';
+  route = '';
 
-  method: string = '';
+  method = '';
 
   headers: any = {};
 
   body: string | undefined;
 
-  statusCode: number = 200;
+  statusCode = 200;
 
-  addHeader(key: string, value: string) {
+  addHeader(key: string, value: string): void {
     this.headers[key] = value;
   }
 }

@@ -8,9 +8,8 @@ describe('MockedResponseDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MockedResponseDetailsComponent ]
-    })
-    .compileComponents();
+      declarations: [MockedResponseDetailsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

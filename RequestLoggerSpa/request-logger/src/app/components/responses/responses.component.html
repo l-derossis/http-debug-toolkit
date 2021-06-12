@@ -1,37 +1,63 @@
 <mat-drawer-container fxFill>
+  <mat-drawer
+    mode="side"
+    opened="true"
+    class="filters-drawer"
+    fxLayout="column"
+  >
+    <div fxFlexAlign="stretch" fxLayout="column" fxLayoutGap="10px">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="openRouteCreationPopup()"
+        fxFlex
+      >
+        ADD
+      </button>
+      <button mat-raised-button color="primary" (click)="exportRoutes()" fxFlex>
+        EXPORT
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="openResponsesImportPopup()"
+        fxFlex
+      >
+        IMPORT
+      </button>
+    </div>
+  </mat-drawer>
 
-    <mat-drawer mode="side" opened="true" class="filters-drawer" fxLayout="column">
-        <div fxFlexAlign="stretch" fxLayout="column" fxLayoutGap="10px">
-            <button mat-raised-button color="primary" (click)="openRouteCreationPopup()" fxFlex> ADD
-            </button>
-            <button mat-raised-button color="primary" (click)="exportRoutes()" fxFlex> EXPORT
-            </button>
-            <button mat-raised-button color="primary" (click)="openResponsesImportPopup()" fxFlex> IMPORT
-            </button>
-        </div>
-    </mat-drawer>
+  <mat-drawer-content>
+    <ng-container *ngIf="responses.length; else empty">
+      <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden" fxFill>
+        <app-method-route
+          Method="{{ response.method }}"
+          Route="{{ response.route }}"
+          *ngFor="let response of responses; index as i"
+          class="selectable-list-element"
+          (click)="responseSelected(i)"
+        >
+        </app-method-route>
+      </div>
+    </ng-container>
 
-    <mat-drawer-content>
-        <ng-container *ngIf="responses.length; else empty">
-            <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden;" fxFill>
-                <app-method-route Method={{response.method}} Route={{response.route}}
-                    *ngFor="let response of responses; index as i" class="selectable-list-element"
-                    (click)="responseSelected(i)">
-                </app-method-route>
-            </div>
-        </ng-container>
+    <ng-template #empty>
+      <div class="empty-content" fxLayout="column">
+        <p>No registered routes.</p>
+      </div>
+    </ng-template>
+  </mat-drawer-content>
 
-        <ng-template #empty>
-            <div class="empty-content" fxLayout="column">
-                <p>
-                    No registered routes.
-                </p>
-            </div>
-        </ng-template>
-
-    </mat-drawer-content>
-
-    <mat-drawer #drawer mode="over" opened="false" class="details-drawer" position="end">
-        <app-mocked-response-details [response]="selectedResponse"></app-mocked-response-details>
-    </mat-drawer>
+  <mat-drawer
+    #drawer
+    mode="over"
+    opened="false"
+    class="details-drawer"
+    position="end"
+  >
+    <app-mocked-response-details
+      [response]="selectedResponse"
+    ></app-mocked-response-details>
+  </mat-drawer>
 </mat-drawer-container>

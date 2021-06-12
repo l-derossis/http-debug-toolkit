@@ -22,7 +22,7 @@ export class ResponsesImportComponent {
   fileLoading$ = this.fileLoadingSubject.pipe(distinctUntilChanged());
 
   // Step 2
-  fileIsValid: boolean = false;
+  fileIsValid = false;
   responses: MockedResponse[] | undefined;
 
   // Step 3
@@ -31,12 +31,12 @@ export class ResponsesImportComponent {
     distinctUntilChanged()
   );
   uploadResultMessage: string | undefined;
-  importSuccessful: boolean = false;
+  importSuccessful = false;
   errors: string[] = [];
 
   constructor(private apiService: ResponsesApiService) {}
 
-  onSelect(event: any) {
+  onSelect(event: any): void {
     console.log(event);
     if (this.files.length > 0) {
       this.files = [];
@@ -45,14 +45,14 @@ export class ResponsesImportComponent {
     this.fileUploadStep.completed = true;
   }
 
-  onRemove(_: File) {
+  clearFiles(): void {
     this.files = [];
     this.fileUploadStep.completed = false;
   }
 
-  parseFile() {
+  parseFile(): void {
     this.responses = [];
-    let reader = new FileReader();
+    const reader = new FileReader();
 
     this.fileLoadingSubject.next(true);
 
@@ -75,10 +75,10 @@ export class ResponsesImportComponent {
     reader.readAsText(this.files[0]);
   }
 
-  uploadResponses() {
+  uploadResponses(): void {
     this.responsesUploadingSubject.next(true);
 
-    this.apiService.registerResponses(this.responses!).subscribe((r) => {
+    this.apiService.registerResponses(this.responses ?? []).subscribe((r) => {
       this.uploadResultMessage = r.message;
       if (r.errors.length == 0) {
         this.importSuccessful = true;
@@ -97,7 +97,7 @@ export class ResponsesImportComponent {
     });
   }
 
-  onStepChange(event: StepperSelectionEvent) {
+  onStepChange(event: StepperSelectionEvent): void {
     if (event.selectedIndex == 1) {
       this.parseFile();
     }
@@ -108,7 +108,7 @@ export class ResponsesImportComponent {
     }
   }
 
-  close() {
+  close(): void {
     this.done.emit();
   }
 }

@@ -4,9 +4,8 @@ import { Component, Input } from '@angular/core';
   selector: 'app-method-route',
   templateUrl: './method-route.component.html',
   styleUrls: ['./method-route.component.scss'],
-  host: {},
 })
 export class MethodRouteComponent {
-  @Input() Route: string = '';
-  @Input() Method: string = '';
+  @Input() Route = '';
+  @Input() Method = '';
 }

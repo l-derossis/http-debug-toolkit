@@ -38,12 +38,12 @@ export class ResponsesComponent implements OnInit {
   ngOnInit(): void {
     this.loadRoutes();
 
-    this.route.queryParams.subscribe((p) => {
+    this.route.queryParams.subscribe(() => {
       this.openDetailsDrawerIfRequired();
     });
   }
 
-  responseSelected(index: number) {
+  responseSelected(index: number): void {
     this.router.navigate([], {
       queryParams: {
         route: this.responses[index].route,
@@ -54,7 +54,7 @@ export class ResponsesComponent implements OnInit {
 
   openRouteCreationPopup(): void {
     const dialogRef = this.dialog.open(ResponseCreationComponent);
-    dialogRef.componentInstance.routeCreatedEvent.subscribe((_) => {
+    dialogRef.componentInstance.routeCreatedEvent.subscribe(() => {
       dialogRef.close();
       this.loadRoutes();
     });
@@ -62,13 +62,13 @@ export class ResponsesComponent implements OnInit {
 
   openResponsesImportPopup(): void {
     const dialogRef = this.dialog.open(ResponsesImportComponent);
-    dialogRef.componentInstance.done.subscribe((_) => {
+    dialogRef.componentInstance.done.subscribe(() => {
       dialogRef.close();
       this.loadRoutes();
     });
   }
 
-  loadRoutes() {
+  loadRoutes(): void {
     this.responsesService.getResponses().subscribe((r) => {
       this.responses = r;
 
@@ -80,13 +80,13 @@ export class ResponsesComponent implements OnInit {
     });
   }
 
-  openDetailsDrawerIfRequired() {
+  openDetailsDrawerIfRequired(): void {
     const response = this.getResponseFromQueryParams();
 
     if (response) {
       this.selectedResponse = response;
       this._drawer?.open();
-      this._drawer?.closedStart.pipe(first()).subscribe((_) => {
+      this._drawer?.closedStart.pipe(first()).subscribe(() => {
         this.clearRouteMethodParams();
       });
     }
@@ -105,8 +105,8 @@ export class ResponsesComponent implements OnInit {
     );
   }
 
-  clearRouteMethodParams() {
-    let params = { ...this.route.snapshot.queryParams };
+  clearRouteMethodParams(): void {
+    const params = { ...this.route.snapshot.queryParams };
     delete params.route;
     delete params.method;
 
@@ -116,7 +116,7 @@ export class ResponsesComponent implements OnInit {
     });
   }
 
-  exportRoutes() {
+  exportRoutes(): void {
     this.responsesService.exportResponsesRaw().subscribe((blob) => {
       const a = document.createElement('a');
       const objectUrl = URL.createObjectURL(blob);
