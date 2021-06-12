@@ -24,7 +24,7 @@ export class EndpointCreationComponent {
   requestForm: FormGroup = this.formBuilder.group({
     route: this.formBuilder.control('/', [
       Validators.required,
-      urlValidator(/^[-a-zA-Z0-9@:%_+.~#?&=]*$/i),
+      urlValidator(/^\/[-a-zA-Z0-9@:%_+.~#?&=/]*$/i),
     ]),
     method: ['GET', [Validators.required]],
     body: [],

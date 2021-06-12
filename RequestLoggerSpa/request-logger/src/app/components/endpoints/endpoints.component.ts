@@ -92,6 +92,12 @@ export class EndpointsComponent implements OnInit {
     }
   }
 
+  clearEndpoints(): void {
+    this.endpointsService
+      .clearEndpoints()
+      .subscribe(() => this.loadEndpoints());
+  }
+
   getEndpointFromQueryParams(): Endpoint | undefined {
     const route: string = this.route.snapshot.queryParams.route;
     const method: string = this.route.snapshot.queryParams.method;

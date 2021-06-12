@@ -12,6 +12,7 @@ export class EndpointsApiService {
   private readonly baseEndpoint: string =
     environment.apiUrl + '/api/configuration/endpoints';
   private readonly importEndpoint: string = this.baseEndpoint + '/import';
+  private readonly clearEndpoint: string = this.baseEndpoint + '/clear';
 
   constructor(private http: HttpClient) {}
 
@@ -33,6 +34,10 @@ export class EndpointsApiService {
     return this.http.get(this.baseEndpoint, {
       responseType: 'blob',
     });
+  }
+
+  clearEndpoints(): Observable<string> {
+    return this.http.post(this.clearEndpoint, {}, { responseType: 'text' });
   }
 
   convertApiEndpoint(apiEndpoint: any): Endpoint {
