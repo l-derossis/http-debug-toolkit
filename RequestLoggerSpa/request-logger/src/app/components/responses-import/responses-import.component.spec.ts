@@ -2,7 +2,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
-import { MockedResponse } from 'src/app/models/mocked-response';
+import { Endpoint } from 'src/app/models/endpoint';
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 
 import { ResponsesImportComponent } from './responses-import.component';
@@ -136,11 +136,11 @@ describe('ResponsesImportComponent', () => {
     return JSON.stringify(buildResponses(count));
   }
 
-  function buildResponses(count: number): MockedResponse[] {
-    const responses: MockedResponse[] = [];
+  function buildResponses(count: number): Endpoint[] {
+    const responses: Endpoint[] = [];
 
     for (let i = 0; i < count; ++i) {
-      responses.push(new MockedResponse(`/route${i}`, 'GET', 200));
+      responses.push(new Endpoint(`/route${i}`, 'GET', 200));
     }
 
     return responses;

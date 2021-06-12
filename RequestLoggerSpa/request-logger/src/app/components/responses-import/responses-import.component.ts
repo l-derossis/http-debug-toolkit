@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatStep } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { MockedResponse } from 'src/app/models/mocked-response';
+import { Endpoint } from 'src/app/models/endpoint';
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class ResponsesImportComponent {
 
   // Step 2
   fileIsValid = false;
-  responses: MockedResponse[] | undefined;
+  responses: Endpoint[] | undefined;
 
   // Step 3
   responsesUploadingSubject = new Subject<boolean>();

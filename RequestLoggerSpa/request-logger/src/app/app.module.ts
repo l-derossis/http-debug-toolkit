@@ -28,7 +28,7 @@ import { AppComponent } from './app.component';
 import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
 import { ResponsesComponent } from './components/responses/responses.component';
 import { ResponseCreationComponent } from './components/response-creation/response-creation.component';
-import { MockedResponseDetailsComponent } from './components/mocked-response-details/mocked-response-details.component';
+import { EndpointDetailsComponent } from './components/endpoint-details/endpoint-details.component';
 import { ResponsesImportComponent } from './components/responses-import/responses-import.component';
 
 @NgModule({
@@ -37,7 +37,7 @@ import { ResponsesImportComponent } from './components/responses-import/response
     RequestLoggerComponent,
     ResponsesComponent,
     ResponseCreationComponent,
-    MockedResponseDetailsComponent,
+    EndpointDetailsComponent,
     MethodRouteComponent,
     ResponsesImportComponent,
   ],

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MockedResponse } from 'src/app/models/mocked-response';
+import { Endpoint } from 'src/app/models/endpoint';
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseCreationComponent } from '../response-creation/response-creation.component';
@@ -14,8 +14,8 @@ import { ResponsesImportComponent } from '../responses-import/responses-import.c
   styleUrls: ['./responses.component.scss'],
 })
 export class ResponsesComponent implements OnInit {
-  responses: MockedResponse[] = [];
-  selectedResponse: MockedResponse | undefined;
+  responses: Endpoint[] = [];
+  selectedResponse: Endpoint | undefined;
 
   private _drawer: MatSidenav | undefined;
   @ViewChild('drawer') set drawer(drawer: MatSidenav | undefined) {
@@ -92,7 +92,7 @@ export class ResponsesComponent implements OnInit {
     }
   }
 
-  getResponseFromQueryParams(): MockedResponse | undefined {
+  getResponseFromQueryParams(): Endpoint | undefined {
     const route: string = this.route.snapshot.queryParams.route;
     const method: string = this.route.snapshot.queryParams.method;
 

@@ -8,7 +8,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 
 import { ResponsesApiService } from './responses-api.service';
-import { MockedResponse } from '../models/mocked-response';
+import { Endpoint } from '../models/endpoint';
 
 describe('ResponsesApiService', () => {
   let httpTestingController: HttpTestingController;
@@ -35,12 +35,12 @@ describe('ResponsesApiService', () => {
   });
 
   it('should register a valid mocked response', () => {
-    const response = new MockedResponse('/route', 'GET', 200, '', null);
+    const response = new Endpoint('/route', 'GET', 200, '', null);
 
     service.registerResponse(response).subscribe(() => expect(true));
 
     const req = httpTestingController.expectOne(
-      'https://localhost:5001/api/configuration/responses'
+      'https://localhost:5001/api/configuration/endpoints'
     );
     expect(req.request.method).toBe('POST');
     req.flush(null);
@@ -48,14 +48,14 @@ describe('ResponsesApiService', () => {
 
   it('should register valid mocked responses', () => {
     const responses = [
-      new MockedResponse('/route1', 'GET', 200, '', null),
-      new MockedResponse('/route2', 'GET', 200, '', null),
+      new Endpoint('/route1', 'GET', 200, '', null),
+      new Endpoint('/route2', 'GET', 200, '', null),
     ];
 
     service.registerResponses(responses).subscribe(() => expect(true));
 
     const req = httpTestingController.expectOne(
-      'https://localhost:5001/api/configuration/responses/import'
+      'https://localhost:5001/api/configuration/endpoints/import'
     );
     expect(req.request.method).toBe('POST');
     req.flush(null);
@@ -64,12 +64,12 @@ describe('ResponsesApiService', () => {
   it('should get all responses', () => {
     const responses = buildResponses(3);
 
-    service.getResponses().subscribe((r: MockedResponse[]) => {
+    service.getResponses().subscribe((r: Endpoint[]) => {
       expect(r).toHaveSize(3);
     });
 
     const req = httpTestingController.expectOne(
-      'https://localhost:5001/api/configuration/responses'
+      'https://localhost:5001/api/configuration/endpoints'
     );
     expect(req.request.method).toBe('GET');
     req.flush(responses);

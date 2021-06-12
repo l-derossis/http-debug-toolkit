@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { finalize } from 'rxjs/operators';
-import { MockedResponse } from 'src/app/models/mocked-response';
+import { Endpoint } from 'src/app/models/endpoint';
 
 import { ResponsesApiService } from 'src/app/services/responses-api.service';
 
@@ -64,8 +64,8 @@ export class ResponseCreationComponent {
     }
   }
 
-  getModelFromForm(): MockedResponse {
-    const response = new MockedResponse(
+  getModelFromForm(): Endpoint {
+    const response = new Endpoint(
       this.requestForm.get('route')?.value,
       this.requestForm.get('method')?.value,
       this.requestForm.get('statusCode')?.value,
