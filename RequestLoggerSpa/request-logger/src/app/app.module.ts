@@ -27,7 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
 import { ResponsesComponent } from './components/responses/responses.component';
-import { ResponseCreationComponent } from './components/response-creation/response-creation.component';
+import { EndpointCreationComponent } from './components/endpoint-creation/endpoint-creation.component';
 import { EndpointDetailsComponent } from './components/endpoint-details/endpoint-details.component';
 import { ResponsesImportComponent } from './components/responses-import/responses-import.component';
 
@@ -36,7 +36,7 @@ import { ResponsesImportComponent } from './components/responses-import/response
     AppComponent,
     RequestLoggerComponent,
     ResponsesComponent,
-    ResponseCreationComponent,
+    EndpointCreationComponent,
     EndpointDetailsComponent,
     MethodRouteComponent,
     ResponsesImportComponent,

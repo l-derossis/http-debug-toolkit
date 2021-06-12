@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Endpoint } from 'src/app/models/endpoint';
 import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ResponseCreationComponent } from '../response-creation/response-creation.component';
+import { EndpointCreationComponent } from '../endpoint-creation/endpoint-creation.component';
 import { MatSidenav } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -53,7 +53,7 @@ export class ResponsesComponent implements OnInit {
   }
 
   openRouteCreationPopup(): void {
-    const dialogRef = this.dialog.open(ResponseCreationComponent);
+    const dialogRef = this.dialog.open(EndpointCreationComponent);
     dialogRef.componentInstance.routeCreatedEvent.subscribe(() => {
       dialogRef.close();
       this.loadRoutes();

@@ -16,11 +16,11 @@ import { Endpoint } from 'src/app/models/endpoint';
 import { EndpointsApiService as EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 @Component({
-  selector: 'app-response-creation',
-  templateUrl: './response-creation.component.html',
-  styleUrls: ['./response-creation.component.scss'],
+  selector: 'app-endpoint-creation',
+  templateUrl: './endpoint-creation.component.html',
+  styleUrls: ['./endpoint-creation.component.scss'],
 })
-export class ResponseCreationComponent {
+export class EndpointCreationComponent {
   requestForm: FormGroup = this.formBuilder.group({
     route: this.formBuilder.control('/', [
       Validators.required,
@@ -45,10 +45,10 @@ export class ResponseCreationComponent {
   submit(): void {
     this.submitButton.disabled = true;
 
-    const response = this.getModelFromForm();
+    const endpoint = this.getModelFromForm();
 
     this.endpointsService
-      .registerEndpoint(response)
+      .registerEndpoint(endpoint)
       .pipe(finalize(() => (this.submitButton.disabled = false)))
       .subscribe(
         () => {
@@ -65,7 +65,7 @@ export class ResponseCreationComponent {
   }
 
   getModelFromForm(): Endpoint {
-    const response = new Endpoint(
+    const endpoint = new Endpoint(
       this.requestForm.get('route')?.value,
       this.requestForm.get('method')?.value,
       this.requestForm.get('statusCode')?.value,
@@ -77,11 +77,11 @@ export class ResponseCreationComponent {
       const key = header.get('key')?.value;
       const value = header.get('value')?.value;
       if (key && value) {
-        response.addHeader(key, value);
+        endpoint.addHeader(key, value);
       }
     });
 
-    return response;
+    return endpoint;
   }
 
   createHeader(): FormGroup {
