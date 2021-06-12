@@ -7,13 +7,13 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 
-import { ResponsesApiService } from './responses-api.service';
+import { EndpointsApiService } from './endpoints-api.service';
 import { Endpoint } from '../models/endpoint';
 
 describe('ResponsesApiService', () => {
   let httpTestingController: HttpTestingController;
 
-  let service: ResponsesApiService;
+  let service: EndpointsApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,7 +23,7 @@ describe('ResponsesApiService', () => {
     // Inject the http service and test controller for each test
     TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(ResponsesApiService);
+    service = TestBed.inject(EndpointsApiService);
   });
 
   afterEach(() => {
@@ -37,7 +37,7 @@ describe('ResponsesApiService', () => {
   it('should register a valid mocked response', () => {
     const response = new Endpoint('/route', 'GET', 200, '', null);
 
-    service.registerResponse(response).subscribe(() => expect(true));
+    service.registerEndpoint(response).subscribe(() => expect(true));
 
     const req = httpTestingController.expectOne(
       'https://localhost:5001/api/configuration/endpoints'
@@ -52,7 +52,7 @@ describe('ResponsesApiService', () => {
       new Endpoint('/route2', 'GET', 200, '', null),
     ];
 
-    service.registerResponses(responses).subscribe(() => expect(true));
+    service.registerEndpoints(responses).subscribe(() => expect(true));
 
     const req = httpTestingController.expectOne(
       'https://localhost:5001/api/configuration/endpoints/import'
@@ -64,7 +64,7 @@ describe('ResponsesApiService', () => {
   it('should get all responses', () => {
     const responses = buildResponses(3);
 
-    service.getResponses().subscribe((r: Endpoint[]) => {
+    service.getEndpoints().subscribe((r: Endpoint[]) => {
       expect(r).toHaveSize(3);
     });
 

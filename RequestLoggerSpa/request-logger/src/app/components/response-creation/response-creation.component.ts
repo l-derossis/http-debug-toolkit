@@ -13,7 +13,7 @@ import { MatButton } from '@angular/material/button';
 import { finalize } from 'rxjs/operators';
 import { Endpoint } from 'src/app/models/endpoint';
 
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { EndpointsApiService as EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 @Component({
   selector: 'app-response-creation',
@@ -38,7 +38,7 @@ export class ResponseCreationComponent {
   @ViewChild('submitButton') submitButton!: MatButton;
 
   constructor(
-    private reponsesService: ResponsesApiService,
+    private endpointsService: EndpointsApiService,
     private formBuilder: FormBuilder
   ) {}
 
@@ -47,8 +47,8 @@ export class ResponseCreationComponent {
 
     const response = this.getModelFromForm();
 
-    this.reponsesService
-      .registerResponse(response)
+    this.endpointsService
+      .registerEndpoint(response)
       .pipe(finalize(() => (this.submitButton.disabled = false)))
       .subscribe(
         () => {

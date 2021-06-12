@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { Endpoint } from 'src/app/models/endpoint';
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 import { ResponsesImportComponent } from './responses-import.component';
 
@@ -13,8 +13,8 @@ describe('ResponsesImportComponent', () => {
 
   let registerResponsesSuccessful = true;
 
-  const serviceStub: Partial<ResponsesApiService> = {
-    registerResponses: (): Observable<any> => {
+  const serviceStub: Partial<EndpointsApiService> = {
+    registerEndpoints: (): Observable<any> => {
       return registerResponsesSuccessful
         ? of({ message: 'Import successful', errors: [] })
         : of({
@@ -38,7 +38,7 @@ describe('ResponsesImportComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ResponsesImportComponent],
-      providers: [{ provide: ResponsesApiService, useValue: serviceStub }],
+      providers: [{ provide: EndpointsApiService, useValue: serviceStub }],
     }).compileComponents();
   });
 

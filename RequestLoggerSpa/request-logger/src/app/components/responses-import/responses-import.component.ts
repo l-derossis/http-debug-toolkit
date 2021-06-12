@@ -4,7 +4,7 @@ import { MatStep } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Endpoint } from 'src/app/models/endpoint';
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 @Component({
   selector: 'app-responses-import',
@@ -34,7 +34,7 @@ export class ResponsesImportComponent {
   importSuccessful = false;
   errors: string[] = [];
 
-  constructor(private apiService: ResponsesApiService) {}
+  constructor(private apiService: EndpointsApiService) {}
 
   onSelect(event: any): void {
     console.log(event);
@@ -78,7 +78,7 @@ export class ResponsesImportComponent {
   uploadResponses(): void {
     this.responsesUploadingSubject.next(true);
 
-    this.apiService.registerResponses(this.responses ?? []).subscribe((r) => {
+    this.apiService.registerEndpoints(this.responses ?? []).subscribe((r) => {
       this.uploadResultMessage = r.message;
       if (r.errors.length == 0) {
         this.importSuccessful = true;

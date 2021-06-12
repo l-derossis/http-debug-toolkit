@@ -8,44 +8,44 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class ResponsesApiService {
+export class EndpointsApiService {
   private readonly baseEndpoint: string =
     environment.apiUrl + '/api/configuration/endpoints';
   private readonly importEndpoint: string = this.baseEndpoint + '/import';
 
   constructor(private http: HttpClient) {}
 
-  registerResponse(response: Endpoint): Observable<any> {
-    return this.http.post(this.baseEndpoint, response);
+  registerEndpoint(endpoint: Endpoint): Observable<any> {
+    return this.http.post(this.baseEndpoint, endpoint);
   }
 
-  registerResponses(responses: Endpoint[]): Observable<any> {
-    return this.http.post(this.importEndpoint, responses);
+  registerEndpoints(endpoints: Endpoint[]): Observable<any> {
+    return this.http.post(this.importEndpoint, endpoints);
   }
 
-  getResponses(): Observable<Endpoint[]> {
+  getEndpoints(): Observable<Endpoint[]> {
     return this.http
       .get<any[]>(this.baseEndpoint)
-      .pipe(map((array) => this.convertApiResponses(array)));
+      .pipe(map((array) => this.convertApiEndpoints(array)));
   }
 
-  exportResponsesRaw(): Observable<Blob> {
+  exportEndpointsRaw(): Observable<Blob> {
     return this.http.get(this.baseEndpoint, {
       responseType: 'blob',
     });
   }
 
-  convertApiResponse(apiResponse: any): Endpoint {
+  convertApiEndpoint(apiEndpoint: any): Endpoint {
     return new Endpoint(
-      apiResponse.route,
-      apiResponse.method,
-      apiResponse.statusCode,
-      apiResponse.body,
-      apiResponse.headers
+      apiEndpoint.route,
+      apiEndpoint.method,
+      apiEndpoint.statusCode,
+      apiEndpoint.body,
+      apiEndpoint.headers
     );
   }
 
-  convertApiResponses(apiResponses: any[]): Endpoint[] {
-    return apiResponses.map(this.convertApiResponse);
+  convertApiEndpoints(apiEndpoints: any[]): Endpoint[] {
+    return apiEndpoints.map(this.convertApiEndpoint);
   }
 }

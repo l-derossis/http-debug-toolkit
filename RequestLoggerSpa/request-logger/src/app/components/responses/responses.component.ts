@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Endpoint } from 'src/app/models/endpoint';
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseCreationComponent } from '../response-creation/response-creation.component';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -29,7 +29,7 @@ export class ResponsesComponent implements OnInit {
   }
 
   constructor(
-    private responsesService: ResponsesApiService,
+    private responsesService: EndpointsApiService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
@@ -69,7 +69,7 @@ export class ResponsesComponent implements OnInit {
   }
 
   loadRoutes(): void {
-    this.responsesService.getResponses().subscribe((r) => {
+    this.responsesService.getEndpoints().subscribe((r) => {
       this.responses = r;
 
       const response = this.getResponseFromQueryParams();
@@ -117,7 +117,7 @@ export class ResponsesComponent implements OnInit {
   }
 
   exportRoutes(): void {
-    this.responsesService.exportResponsesRaw().subscribe((blob) => {
+    this.responsesService.exportEndpointsRaw().subscribe((blob) => {
       const a = document.createElement('a');
       const objectUrl = URL.createObjectURL(blob);
       a.href = objectUrl;
