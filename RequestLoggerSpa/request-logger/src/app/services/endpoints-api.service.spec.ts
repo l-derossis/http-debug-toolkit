@@ -7,13 +7,13 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 
-import { ResponsesApiService } from './responses-api.service';
-import { MockedResponse } from '../models/mocked-response';
+import { EndpointsApiService } from './endpoints-api.service';
+import { Endpoint } from '../models/endpoint';
 
-describe('ResponsesApiService', () => {
+describe('EndpointsApiService', () => {
   let httpTestingController: HttpTestingController;
 
-  let service: ResponsesApiService;
+  let service: EndpointsApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,7 +23,7 @@ describe('ResponsesApiService', () => {
     // Inject the http service and test controller for each test
     TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(ResponsesApiService);
+    service = TestBed.inject(EndpointsApiService);
   });
 
   afterEach(() => {
@@ -34,53 +34,53 @@ describe('ResponsesApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should register a valid mocked response', () => {
-    const response = new MockedResponse('/route', 'GET', 200, '', null);
+  it('should register a valid endpoint', () => {
+    const endpoint = new Endpoint('/route', 'GET', 200, '', null);
 
-    service.registerResponse(response).subscribe(() => expect(true));
+    service.registerEndpoint(endpoint).subscribe(() => expect(true));
 
     const req = httpTestingController.expectOne(
-      'https://localhost:5001/api/configuration/responses'
+      'https://localhost:5001/api/configuration/endpoints'
     );
     expect(req.request.method).toBe('POST');
     req.flush(null);
   });
 
-  it('should register valid mocked responses', () => {
-    const responses = [
-      new MockedResponse('/route1', 'GET', 200, '', null),
-      new MockedResponse('/route2', 'GET', 200, '', null),
+  it('should register valid endpoints', () => {
+    const endpoints = [
+      new Endpoint('/route1', 'GET', 200, '', null),
+      new Endpoint('/route2', 'GET', 200, '', null),
     ];
 
-    service.registerResponses(responses).subscribe(() => expect(true));
+    service.registerEndpoints(endpoints).subscribe(() => expect(true));
 
     const req = httpTestingController.expectOne(
-      'https://localhost:5001/api/configuration/responses/import'
+      'https://localhost:5001/api/configuration/endpoints/import'
     );
     expect(req.request.method).toBe('POST');
     req.flush(null);
   });
 
-  it('should get all responses', () => {
-    const responses = buildResponses(3);
+  it('should get all endpoints', () => {
+    const endpoints = buildEndpoints(3);
 
-    service.getResponses().subscribe((r: MockedResponse[]) => {
+    service.getEndpoints().subscribe((r: Endpoint[]) => {
       expect(r).toHaveSize(3);
     });
 
     const req = httpTestingController.expectOne(
-      'https://localhost:5001/api/configuration/responses'
+      'https://localhost:5001/api/configuration/endpoints'
     );
     expect(req.request.method).toBe('GET');
-    req.flush(responses);
+    req.flush(endpoints);
   });
 });
 
-function buildResponses(count: number): any {
-  const responses: any[] = [];
+function buildEndpoints(count: number): any {
+  const endpoints: any[] = [];
 
   for (let i = 0; i < count; ++i) {
-    responses.push({
+    endpoints.push({
       route: `/route${i}`,
       method: 'GET',
       headers: [],
@@ -89,5 +89,5 @@ function buildResponses(count: number): any {
     });
   }
 
-  return responses;
+  return endpoints;
 }

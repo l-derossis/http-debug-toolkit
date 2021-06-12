@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,28 +8,26 @@ using RequestLogger.Domain.Services;
 using RequestLogger.Dtos;
 using RequestLogger.Infrastructure.Data;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using RequestLogger.Controllers.Results;
 
 namespace RequestLogger.Tests.Controllers
 {
     [TestClass]
-    public class ResponseControllerTests
+    public class EndpointControllerTests
     {
-        private ResponseController _controller;
+        private EndpointController _controller;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            var repository = new InMemoryMockedResponseRepository();
-            var service = new MockedResponseService(repository);
-            _controller = new ResponseController(service);
+            var repository = new InMemoryEndpointRepository();
+            var service = new EndpointService(repository);
+            _controller = new EndpointController(service);
         }
 
         [TestMethod]
-        public async Task RegisterResponse_Success()
+        public async Task RegisterEndpoint_Success()
         {
-            var dto = new ResponseDto
+            var dto = new EndpointDto
             {
                 Body = "body",
                 Method = "GET",
@@ -38,7 +35,7 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = 201
             };
 
-            var result = await _controller.RegisterResponse(dto);
+            var result = await _controller.RegisterEndpoint(dto);
             result.Should().BeOfType<OkResult>();
         }
 
@@ -47,9 +44,9 @@ namespace RequestLogger.Tests.Controllers
         [DataRow("/",200,"","ME THOD")] // Method should not contain spaces
         [DataRow("",5151,"","GET")] // Status code does not exist
         [DataRow("/ invalid route", 200, "", "GET")] // Routes should not have spaces
-        public async Task RegisterResponse_BadRequest(string route, int statusCode, string body, string method)
+        public async Task RegisterEndpoint_BadRequest(string route, int statusCode, string body, string method)
         {
-            var dto = new ResponseDto
+            var dto = new EndpointDto
             {
                 Body = body,
                 Method = method,
@@ -57,14 +54,14 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = statusCode
             };
 
-            var result = await _controller.RegisterResponse(dto);
+            var result = await _controller.RegisterEndpoint(dto);
             result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [TestMethod]
-        public async Task RegisterResponse_Duplicate()
+        public async Task RegisterEndpoint_Duplicate()
         {
-            var dto = new ResponseDto
+            var dto = new EndpointDto
             {
                 Body = "content",
                 Method = "GET",
@@ -72,8 +69,8 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = 200
             };
 
-            await _controller.RegisterResponse(dto);
-            var result = await _controller.RegisterResponse(dto);
+            await _controller.RegisterEndpoint(dto);
+            var result = await _controller.RegisterEndpoint(dto);
 
             result.Should().BeOfType<ConflictObjectResult>();
         }
@@ -81,16 +78,16 @@ namespace RequestLogger.Tests.Controllers
         [TestMethod]
         public async Task Import_Success()
         {
-            var dtos = new List<ResponseDto>
+            var dtos = new List<EndpointDto>
             {
-                new ResponseDto
+                new EndpointDto
                 {
                     Body = "content",
                     Method = "GET",
                     Route = "/route1",
                     StatusCode = 200
                 },
-                new ResponseDto
+                new EndpointDto
                 {
                     Body = "content",
                     Method = "GET",
@@ -107,16 +104,16 @@ namespace RequestLogger.Tests.Controllers
         [TestMethod]
         public async Task Import_Duplicate()
         {
-            var dtos = new List<ResponseDto>
+            var dtos = new List<EndpointDto>
             {
-                new ResponseDto
+                new EndpointDto
                 {
                     Body = "content",
                     Method = "GET",
                     Route = "/route",
                     StatusCode = 200
                 },
-                new ResponseDto
+                new EndpointDto
                 {
                     Body = "content",
                     Method = "GET",
@@ -135,17 +132,17 @@ namespace RequestLogger.Tests.Controllers
         }
 
         [TestMethod]
-        public async Task GetResponses_Empty()
+        public async Task GetEndpoints_Empty()
         {
-            var result = await _controller.GetResponses();
+            var result = await _controller.GetEndpoints();
 
             result.Value.Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task GetResponses_MultipleElements()
+        public async Task GetEndpoints_MultipleElements()
         {
-            await _controller.RegisterResponse(new ResponseDto
+            await _controller.RegisterEndpoint(new EndpointDto
             {
                 Body = "body",
                 Method = "GET",
@@ -153,7 +150,7 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = 200
             });
 
-            await _controller.RegisterResponse(new ResponseDto
+            await _controller.RegisterEndpoint(new EndpointDto
             {
                 Body = "body",
                 Method = "GET",
@@ -161,7 +158,7 @@ namespace RequestLogger.Tests.Controllers
                 StatusCode = 200
             });
 
-            var result = await _controller.GetResponses();
+            var result = await _controller.GetEndpoints();
 
             result.Value.Count.Should().Be(2);
         }

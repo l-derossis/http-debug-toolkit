@@ -7,7 +7,7 @@ using RequestLogger.Domain.Entities;
 namespace RequestLogger.Tests.Entities
 {
     [TestClass]
-    public class MockedResponseTests
+    public class EndpointTests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -15,7 +15,7 @@ namespace RequestLogger.Tests.Entities
         [DataRow("itShouldStartWithASlash")]
         public void InvalidRoute(string route)
         {
-            var _ = new MockedResponse
+            var _ = new Endpoint
             {
                 Body = "valid body",
                 StatusCode = HttpStatusCode.OK,
@@ -28,7 +28,7 @@ namespace RequestLogger.Tests.Entities
         [ExpectedException(typeof(ArgumentException))]
         public void InvalidStatusCode()
         {
-            var _ = new MockedResponse
+            var _ = new Endpoint
             {
                 Body = "valid body",
                 StatusCode = (HttpStatusCode)100000,

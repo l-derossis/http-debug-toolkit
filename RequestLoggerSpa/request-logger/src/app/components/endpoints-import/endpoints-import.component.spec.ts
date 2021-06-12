@@ -2,20 +2,20 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
-import { MockedResponse } from 'src/app/models/mocked-response';
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { Endpoint } from 'src/app/models/endpoint';
+import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
-import { ResponsesImportComponent } from './responses-import.component';
+import { EndpointsImportComponent } from './endpoints-import.component';
 
-describe('ResponsesImportComponent', () => {
-  let component: ResponsesImportComponent;
-  let fixture: ComponentFixture<ResponsesImportComponent>;
+describe('EndpointsImportComponent', () => {
+  let component: EndpointsImportComponent;
+  let fixture: ComponentFixture<EndpointsImportComponent>;
 
-  let registerResponsesSuccessful = true;
+  let registerEndpointsSuccessful = true;
 
-  const serviceStub: Partial<ResponsesApiService> = {
-    registerResponses: (): Observable<any> => {
-      return registerResponsesSuccessful
+  const serviceStub: Partial<EndpointsApiService> = {
+    registerEndpoints: (): Observable<any> => {
+      return registerEndpointsSuccessful
         ? of({ message: 'Import successful', errors: [] })
         : of({
             message: 'Error(s) occured during the import',
@@ -37,13 +37,13 @@ describe('ResponsesImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ResponsesImportComponent],
-      providers: [{ provide: ResponsesApiService, useValue: serviceStub }],
+      declarations: [EndpointsImportComponent],
+      providers: [{ provide: EndpointsApiService, useValue: serviceStub }],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ResponsesImportComponent);
+    fixture = TestBed.createComponent(EndpointsImportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -55,7 +55,7 @@ describe('ResponsesImportComponent', () => {
   // STEP 1 - File import
 
   it('should not parse an invalid file', () => {
-    const file = new File([''], 'responses.json');
+    const file = new File([''], 'endpoints.json');
     component.files.push(file);
     const stepEvent = new StepperSelectionEvent();
     stepEvent.selectedIndex = 1;
@@ -66,7 +66,7 @@ describe('ResponsesImportComponent', () => {
   });
 
   it('should parse a valid file', async () => {
-    const file = new File([buildResponseFileContent(3)], 'responses.json');
+    const file = new File([buildEndpointsFileContent(3)], 'endpoints.json');
     component.files.push(file);
 
     component.fileLoading$.subscribe((loading) => {
@@ -77,7 +77,7 @@ describe('ResponsesImportComponent', () => {
           By.css('app-method-route')
         );
         expect(routes.length).toBe(3);
-        expect(component.responses?.length).toBe(3);
+        expect(component.endpoints?.length).toBe(3);
       }
     });
 
@@ -95,13 +95,13 @@ describe('ResponsesImportComponent', () => {
     expect(errorLabel).toBeDefined();
   });
 
-  // STEP 3 - Responses upload
+  // STEP 3 - Endpoints upload
 
   it('should display the upload result message', async () => {
-    registerResponsesSuccessful = true;
-    component.responses = buildResponses(2);
+    registerEndpointsSuccessful = true;
+    component.endpoints = buildEndpoints(2);
 
-    component.responsesUploading$.subscribe((loading) => {
+    component.endpointsUploading$.subscribe((loading) => {
       if (!loading) {
         fixture.detectChanges();
         const uploadMessage = fixture.debugElement.query(
@@ -113,14 +113,14 @@ describe('ResponsesImportComponent', () => {
       }
     });
 
-    component.uploadResponses();
+    component.uploadEndpoints();
   });
 
   it('should display the upload result errors', async () => {
-    registerResponsesSuccessful = false;
-    component.responses = buildResponses(2);
+    registerEndpointsSuccessful = false;
+    component.endpoints = buildEndpoints(2);
 
-    component.responsesUploading$.subscribe((loading) => {
+    component.endpointsUploading$.subscribe((loading) => {
       if (!loading) {
         fixture.detectChanges();
         const errors = fixture.debugElement.queryAll(By.css('.error'));
@@ -129,20 +129,20 @@ describe('ResponsesImportComponent', () => {
       }
     });
 
-    component.uploadResponses();
+    component.uploadEndpoints();
   });
 
-  function buildResponseFileContent(count: number): string {
-    return JSON.stringify(buildResponses(count));
+  function buildEndpointsFileContent(count: number): string {
+    return JSON.stringify(buildEndpoints(count));
   }
 
-  function buildResponses(count: number): MockedResponse[] {
-    const responses: MockedResponse[] = [];
+  function buildEndpoints(count: number): Endpoint[] {
+    const endpoints: Endpoint[] = [];
 
     for (let i = 0; i < count; ++i) {
-      responses.push(new MockedResponse(`/route${i}`, 'GET', 200));
+      endpoints.push(new Endpoint(`/route${i}`, 'GET', 200));
     }
 
-    return responses;
+    return endpoints;
   }
 });

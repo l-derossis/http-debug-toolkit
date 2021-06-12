@@ -6,7 +6,7 @@ using RequestLogger.Domain.Entities;
 
 namespace RequestLogger.Dtos
 {
-    public class ResponseDto
+    public class EndpointDto
     {
         public string Route { get; set; }
 
@@ -18,9 +18,9 @@ namespace RequestLogger.Dtos
 
         public int? StatusCode { get; set; }
 
-        public MockedResponse ToEntity()
+        public Endpoint ToEntity()
         {
-            return new MockedResponse
+            return new Endpoint
             {
                 Route = Route,
                 Method = new HttpMethod(Method),
@@ -30,9 +30,9 @@ namespace RequestLogger.Dtos
             };
         }
 
-        public static ResponseDto FromEntity(MockedResponse entity)
+        public static EndpointDto FromEntity(Endpoint entity)
         {
-            return new ResponseDto
+            return new EndpointDto
             {
                 Body = entity.Body,
                 Route = entity.Route,

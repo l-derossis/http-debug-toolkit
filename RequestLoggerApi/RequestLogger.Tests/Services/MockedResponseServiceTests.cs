@@ -1,65 +1,64 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RequestLogger.Domain.Entities;
 using RequestLogger.Domain.Services;
 using RequestLogger.Infrastructure.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace RequestLogger.Tests.Services
 {
     [TestClass]
-    public class MockedResponseServiceTests
+    public class EndpointServiceTests
     {
-        private readonly MockedResponseService _service;
+        private readonly EndpointService _service;
 
-        public MockedResponseServiceTests()
+        public EndpointServiceTests()
         {
-            var repository = new InMemoryMockedResponseRepository();
-            _service = new MockedResponseService(repository);
+            var repository = new InMemoryEndpointRepository();
+            _service = new EndpointService(repository);
         }
 
         [TestMethod]
-        public async Task RegisterResponses_Empty()
+        public async Task RegisterEndpoints_Empty()
         {
-            await _service.RegisterMockedResponses(new List<MockedResponse>());
+            await _service.RegisterEndpoints(new List<Endpoint>());
 
-            var responses = await _service.GetResponses();
+            var endpoints = await _service.GetEndpoints();
 
-            responses.Count.Should().Be(0);
+            endpoints.Count.Should().Be(0);
         }
 
         [TestMethod]
         [DataRow("/a")]
         [DataRow("/a", "/b")]
         [DataRow("/a", "/b", "/c")]
-        public async Task RegisterResponses_Success(params string[] routes)
+        public async Task RegisterEndpoints_Success(params string[] routes)
         {
-            await _service.RegisterMockedResponses(routes.Select(CreateResponse).ToList());
+            await _service.RegisterEndpoints(routes.Select(CreateEndpoint).ToList());
 
-            var responses = await _service.GetResponses();
+            var endpoints = await _service.GetEndpoints();
 
-            responses.Count.Should().Be(routes.Length);
+            endpoints.Count.Should().Be(routes.Length);
         }
 
         [TestMethod]
-        public async Task RegisterResponses_Duplicate()
+        public async Task RegisterEndpoints_Duplicate()
         {
-            var responses = new List<MockedResponse>
+            var endpoints = new List<Endpoint>
             {
-                CreateResponse("/a"),
-                CreateResponse("/b"),
-                CreateResponse("/b"),
-                CreateResponse("/c"),
-                CreateResponse("/c"),
-                CreateResponse("/d")
+                CreateEndpoint("/a"),
+                CreateEndpoint("/b"),
+                CreateEndpoint("/b"),
+                CreateEndpoint("/c"),
+                CreateEndpoint("/c"),
+                CreateEndpoint("/d")
             };
 
-            var errors = (await _service.RegisterMockedResponses(responses)).ToList();
-            var registeredResponses = await _service.GetResponses();
+            var errors = (await _service.RegisterEndpoints(endpoints)).ToList();
+            var registeredEndpoints = await _service.GetEndpoints();
 
             errors.Count.Should().Be(2);
             errors.ElementAt(0).Method.Should().Be("GET");
@@ -67,12 +66,12 @@ namespace RequestLogger.Tests.Services
             errors.ElementAt(1).Method.Should().Be("GET");
             errors.ElementAt(1).Route.Should().Be("/c");
 
-            registeredResponses.Count.Should().Be(4);
+            registeredEndpoints.Count.Should().Be(4);
         }
 
-        private MockedResponse CreateResponse(string route)
+        private Endpoint CreateEndpoint(string route)
         {
-            return new MockedResponse
+            return new Endpoint
             {
                 Body = "body",
                 Method = HttpMethod.Get,

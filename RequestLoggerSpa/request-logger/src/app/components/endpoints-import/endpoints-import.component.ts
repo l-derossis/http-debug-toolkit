@@ -3,15 +3,15 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatStep } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { MockedResponse } from 'src/app/models/mocked-response';
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { Endpoint } from 'src/app/models/endpoint';
+import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 @Component({
-  selector: 'app-responses-import',
-  templateUrl: './responses-import.component.html',
-  styleUrls: ['./responses-import.component.scss'],
+  selector: 'app-endpoints-import',
+  templateUrl: './endpoints-import.component.html',
+  styleUrls: ['./endpoints-import.component.scss'],
 })
-export class ResponsesImportComponent {
+export class EndpointsImportComponent {
   @ViewChild('fileUploadStep') fileUploadStep!: MatStep;
   @ViewChild('dataValidationStep') dataValidationStep!: MatStep;
   @Output() done = new EventEmitter();
@@ -23,18 +23,18 @@ export class ResponsesImportComponent {
 
   // Step 2
   fileIsValid = false;
-  responses: MockedResponse[] | undefined;
+  endpoints: Endpoint[] | undefined;
 
   // Step 3
-  responsesUploadingSubject = new Subject<boolean>();
-  responsesUploading$ = this.responsesUploadingSubject.pipe(
+  endpointsUploadingSubject = new Subject<boolean>();
+  endpointsUploading$ = this.endpointsUploadingSubject.pipe(
     distinctUntilChanged()
   );
   uploadResultMessage: string | undefined;
   importSuccessful = false;
   errors: string[] = [];
 
-  constructor(private apiService: ResponsesApiService) {}
+  constructor(private apiService: EndpointsApiService) {}
 
   onSelect(event: any): void {
     console.log(event);
@@ -51,7 +51,7 @@ export class ResponsesImportComponent {
   }
 
   parseFile(): void {
-    this.responses = [];
+    this.endpoints = [];
     const reader = new FileReader();
 
     this.fileLoadingSubject.next(true);
@@ -63,7 +63,7 @@ export class ResponsesImportComponent {
       }
 
       try {
-        this.responses = JSON.parse(value.toString());
+        this.endpoints = JSON.parse(value.toString());
         this.fileIsValid = true;
       } catch (error) {
         this.fileIsValid = false;
@@ -75,10 +75,10 @@ export class ResponsesImportComponent {
     reader.readAsText(this.files[0]);
   }
 
-  uploadResponses(): void {
-    this.responsesUploadingSubject.next(true);
+  uploadEndpoints(): void {
+    this.endpointsUploadingSubject.next(true);
 
-    this.apiService.registerResponses(this.responses ?? []).subscribe((r) => {
+    this.apiService.registerEndpoints(this.endpoints ?? []).subscribe((r) => {
       this.uploadResultMessage = r.message;
       if (r.errors.length == 0) {
         this.importSuccessful = true;
@@ -93,7 +93,7 @@ export class ResponsesImportComponent {
         });
       }
 
-      this.responsesUploadingSubject.next(false);
+      this.endpointsUploadingSubject.next(false);
     });
   }
 
@@ -103,7 +103,7 @@ export class ResponsesImportComponent {
     }
 
     if (event.selectedIndex == 2) {
-      this.uploadResponses();
+      this.uploadEndpoints();
       this.errors = [];
     }
   }

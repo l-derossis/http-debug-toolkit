@@ -11,16 +11,16 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { finalize } from 'rxjs/operators';
-import { MockedResponse } from 'src/app/models/mocked-response';
+import { Endpoint } from 'src/app/models/endpoint';
 
-import { ResponsesApiService } from 'src/app/services/responses-api.service';
+import { EndpointsApiService as EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 @Component({
-  selector: 'app-response-creation',
-  templateUrl: './response-creation.component.html',
-  styleUrls: ['./response-creation.component.scss'],
+  selector: 'app-endpoint-creation',
+  templateUrl: './endpoint-creation.component.html',
+  styleUrls: ['./endpoint-creation.component.scss'],
 })
-export class ResponseCreationComponent {
+export class EndpointCreationComponent {
   requestForm: FormGroup = this.formBuilder.group({
     route: this.formBuilder.control('/', [
       Validators.required,
@@ -38,17 +38,17 @@ export class ResponseCreationComponent {
   @ViewChild('submitButton') submitButton!: MatButton;
 
   constructor(
-    private reponsesService: ResponsesApiService,
+    private endpointsService: EndpointsApiService,
     private formBuilder: FormBuilder
   ) {}
 
   submit(): void {
     this.submitButton.disabled = true;
 
-    const response = this.getModelFromForm();
+    const endpoint = this.getModelFromForm();
 
-    this.reponsesService
-      .registerResponse(response)
+    this.endpointsService
+      .registerEndpoint(endpoint)
       .pipe(finalize(() => (this.submitButton.disabled = false)))
       .subscribe(
         () => {
@@ -64,8 +64,8 @@ export class ResponseCreationComponent {
     }
   }
 
-  getModelFromForm(): MockedResponse {
-    const response = new MockedResponse(
+  getModelFromForm(): Endpoint {
+    const endpoint = new Endpoint(
       this.requestForm.get('route')?.value,
       this.requestForm.get('method')?.value,
       this.requestForm.get('statusCode')?.value,
@@ -77,11 +77,11 @@ export class ResponseCreationComponent {
       const key = header.get('key')?.value;
       const value = header.get('value')?.value;
       if (key && value) {
-        response.addHeader(key, value);
+        endpoint.addHeader(key, value);
       }
     });
 
-    return response;
+    return endpoint;
   }
 
   createHeader(): FormGroup {

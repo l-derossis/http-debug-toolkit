@@ -13,6 +13,7 @@ using RequestLogger.Domain.Entities;
 using RequestLogger.Domain.Services;
 using RequestLogger.Hubs;
 using RequestLogger.Infrastructure.Data;
+using Endpoint = RequestLogger.Domain.Entities.Endpoint;
 
 namespace RequestLogger.Tests.Controllers
 {
@@ -22,7 +23,7 @@ namespace RequestLogger.Tests.Controllers
         [TestMethod]
         [DataRow("/route1", "GET")]
         [DataRow("/route2", "POST")]
-        public async Task GenericEndpoint_DefaultResponse(string route, string method)
+        public async Task GenericEndpoint_DefaultEndpoint(string route, string method)
         {
             var context = new DefaultHttpContext();
             context.Request.Path = route;
@@ -36,17 +37,17 @@ namespace RequestLogger.Tests.Controllers
         }
 
         [TestMethod]
-        public async Task GenericEndpoint_CustomResponse()
+        public async Task GenericEndpoint_CustomEndpoint()
         {
-            var response = new MockedResponse
+            var endpoint = new Endpoint
             {
                 Body = "content",
                 Method = new HttpMethod("GET"),
                 Route = "/route",
                 StatusCode = HttpStatusCode.Accepted
             };
-            var repository = new InMemoryMockedResponseRepository();
-            await repository.RegisterResponse(response);
+            var repository = new InMemoryEndpointRepository();
+            await repository.RegisterEndpoint(endpoint);
 
             var context = new DefaultHttpContext();
             context.Request.Path = "/route";
@@ -62,15 +63,15 @@ namespace RequestLogger.Tests.Controllers
         [TestMethod]
         public async Task GenericEndpoint_EmptyBody()
         {
-            var response = new MockedResponse
+            var endpoint = new Endpoint
             {
                 Method = new HttpMethod("GET"),
                 Route = "/route",
                 Body = null,
                 StatusCode = HttpStatusCode.OK
             };
-            var repository = new InMemoryMockedResponseRepository();
-            await repository.RegisterResponse(response);
+            var repository = new InMemoryEndpointRepository();
+            await repository.RegisterEndpoint(endpoint);
 
             var context = new DefaultHttpContext();
             context.Request.Path = "/route";
@@ -83,10 +84,10 @@ namespace RequestLogger.Tests.Controllers
             result.Value.Should().Be(null);
         }
 
-        private RequestLogger.Controllers.GenericController BuildController(DefaultHttpContext context, InMemoryMockedResponseRepository repo = null)
+        private RequestLogger.Controllers.GenericController BuildController(DefaultHttpContext context, InMemoryEndpointRepository repo = null)
         {
-            var repository = repo ?? new InMemoryMockedResponseRepository();
-            var service = new MockedResponseService(repository);
+            var repository = repo ?? new InMemoryEndpointRepository();
+            var service = new EndpointService(repository);
             var signalRMoq = Mock.Of<IHubContext<RequestsHub>>();
             
             Mock.Get(signalRMoq).Setup(m => m.Clients.All.SendCoreAsync(It.IsAny<string>(), It.IsAny<object[]>(), It.IsAny<CancellationToken>()));

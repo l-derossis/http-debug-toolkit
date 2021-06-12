@@ -1,4 +1,4 @@
-export class MockedResponse {
+export class Endpoint {
   constructor(
     route: string,
     method: string,

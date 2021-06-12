@@ -5,32 +5,30 @@ using RequestLogger.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using RequestLogger.Controllers.Results;
 
 namespace RequestLogger.Controllers
 {
-    [Route("api/configuration/responses")]
+    [Route("api/configuration/endpoints")]
     [ApiController]
-    public class ResponseController : ControllerBase
+    public class EndpointController : ControllerBase
     {
-        private readonly MockedResponseService _service;
+        private readonly EndpointService _service;
 
-        public ResponseController(MockedResponseService service)
+        public EndpointController(EndpointService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         [HttpPost]
-        public async Task<ActionResult> RegisterResponse([FromBody] ResponseDto dto)
+        public async Task<ActionResult> RegisterEndpoint([FromBody] EndpointDto dto)
         {
-            MockedResponse response;
+            Endpoint endpoint;
 
             try
             {
-                response = dto.ToEntity();
+                endpoint = dto.ToEntity();
             }
             catch (ArgumentException e)
             {
@@ -43,7 +41,7 @@ namespace RequestLogger.Controllers
 
             try
             {
-                await _service.RegisterMockedResponse(response);
+                await _service.RegisterEndpoint(endpoint);
             }
             catch (InvalidOperationException e)
             {
@@ -55,26 +53,26 @@ namespace RequestLogger.Controllers
 
         [HttpPost]
         [Route("import")]
-        public async Task<ActionResult<ResponseImportResult>> Import([FromBody] IList<ResponseDto> dtos)
+        public async Task<ActionResult<EndpointImportResult>> Import([FromBody] IList<EndpointDto> dtos)
         {
-            var responses = dtos.Select(dto => dto.ToEntity());
+            var endpoints = dtos.Select(dto => dto.ToEntity());
 
-            var errors = (await _service.RegisterMockedResponses(responses)).ToList();
+            var errors = (await _service.RegisterEndpoints(endpoints)).ToList();
 
             if (errors.Any())
             {
-                return new ResponseImportResult("Error(s) occured during the import", errors);
+                return new EndpointImportResult("Error(s) occured during the import", errors);
             }
 
-            return new ResponseImportResult("Import successful");
+            return new EndpointImportResult("Import successful");
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<ResponseDto>>> GetResponses()
+        public async Task<ActionResult<IList<EndpointDto>>> GetEndpoints()
         {
-            var responses = await _service.GetResponses();
+            var endpoints = await _service.GetEndpoints();
 
-            var dtos = responses.Select(ResponseDto.FromEntity).ToList();
+            var dtos = endpoints.Select(EndpointDto.FromEntity).ToList();
 
             return dtos;
         }

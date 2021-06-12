@@ -26,20 +26,20 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
-import { ResponsesComponent } from './components/responses/responses.component';
-import { ResponseCreationComponent } from './components/response-creation/response-creation.component';
-import { MockedResponseDetailsComponent } from './components/mocked-response-details/mocked-response-details.component';
-import { ResponsesImportComponent } from './components/responses-import/responses-import.component';
+import { EndpointsComponent } from './components/endpoints/endpoints.component';
+import { EndpointCreationComponent } from './components/endpoint-creation/endpoint-creation.component';
+import { EndpointDetailsComponent } from './components/endpoint-details/endpoint-details.component';
+import { EndpointsImportComponent } from './components/endpoints-import/endpoints-import.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RequestLoggerComponent,
-    ResponsesComponent,
-    ResponseCreationComponent,
-    MockedResponseDetailsComponent,
+    EndpointsComponent,
+    EndpointCreationComponent,
+    EndpointDetailsComponent,
     MethodRouteComponent,
-    ResponsesImportComponent,
+    EndpointsImportComponent,
   ],
   imports: [
     HttpClientModule,

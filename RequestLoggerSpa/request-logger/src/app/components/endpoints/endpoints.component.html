@@ -14,13 +14,18 @@
       >
         ADD
       </button>
-      <button mat-raised-button color="primary" (click)="exportRoutes()" fxFlex>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="exportEndpoints()"
+        fxFlex
+      >
         EXPORT
       </button>
       <button
         mat-raised-button
         color="primary"
-        (click)="openResponsesImportPopup()"
+        (click)="openEndpointsImportPopup()"
         fxFlex
       >
         IMPORT
@@ -29,14 +34,14 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    <ng-container *ngIf="responses.length; else empty">
+    <ng-container *ngIf="endpoints.length; else empty">
       <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden" fxFill>
         <app-method-route
-          Method="{{ response.method }}"
-          Route="{{ response.route }}"
-          *ngFor="let response of responses; index as i"
+          *ngFor="let endpoint of endpoints; index as i"
+          Method="{{ endpoint.method }}"
+          Route="{{ endpoint.route }}"
           class="selectable-list-element"
-          (click)="responseSelected(i)"
+          (click)="endpointSelected(i)"
         >
         </app-method-route>
       </div>
@@ -56,8 +61,6 @@
     class="details-drawer"
     position="end"
   >
-    <app-mocked-response-details
-      [response]="selectedResponse"
-    ></app-mocked-response-details>
+    <app-endpoint-details [endpoint]="selectedEndpoint"></app-endpoint-details>
   </mat-drawer>
 </mat-drawer-container>
