@@ -12,5 +12,7 @@ namespace RequestLogger.Domain.Repositories
         Task RegisterEndpoint(Endpoint endpoint);
 
         Task<IList<Endpoint>> GetAllEndpoints();
+
+        Task DeleteAllEndpoints();
     }
 }

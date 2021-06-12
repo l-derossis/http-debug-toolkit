@@ -162,5 +162,13 @@ namespace RequestLogger.Tests.Controllers
 
             result.Value.Count.Should().Be(2);
         }
+
+        [TestMethod]
+        public async Task ClearAllEndpoints()
+        {
+            var result = await _controller.ClearAllEndpoints();
+
+            result.Should().BeOfType<OkResult>();
+        }
     }
 }

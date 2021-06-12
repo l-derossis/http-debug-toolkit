@@ -115,6 +115,28 @@ namespace RequestLogger.Tests.Data
             endpoints.First().Route.Should().Be("/route1");
         }
 
+        [TestMethod]
+        [DataRow(0)]
+        [DataRow(1)]
+        [DataRow(2)]
+        public async Task DeleteAllEndpoints(int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                await _repository.RegisterEndpoint(new Endpoint()
+                {
+                    Route = $"/route{i}",
+                    Method = HttpMethod.Get,
+                    StatusCode = HttpStatusCode.OK
+                });
+            }
+
+            await _repository.DeleteAllEndpoints();
+
+            var endpoints = await _repository.GetAllEndpoints();
+            endpoints.Should().BeEmpty();
+        }
+
         private Endpoint CreateEndpoint(string route, HttpMethod method)
         {
             var endpoint = new Endpoint

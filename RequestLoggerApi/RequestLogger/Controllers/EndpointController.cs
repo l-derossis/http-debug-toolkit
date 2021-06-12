@@ -76,5 +76,14 @@ namespace RequestLogger.Controllers
 
             return dtos;
         }
+
+        [HttpPost]
+        [Route("clear")]
+        public async Task<ActionResult> ClearAllEndpoints()
+        {
+            await _service.ClearEndpoints();
+
+            return Ok();
+        }
     }
 }

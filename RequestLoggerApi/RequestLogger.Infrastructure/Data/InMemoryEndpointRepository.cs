@@ -43,7 +43,9 @@ namespace RequestLogger.Infrastructure.Data
         {
             await Task.Yield();
 
-            return _endpoints.Select(r => new Endpoint()
+            // Create a copy for each element to avoid returning a reference pointing to
+            // the original one stored in memory
+            return _endpoints.Select(r => new Endpoint
             {
                 Body = r.Body,
                 Route = r.Route,
@@ -51,6 +53,13 @@ namespace RequestLogger.Infrastructure.Data
                 Method = r.Method,
                 StatusCode = r.StatusCode
             }).ToList();
+        }
+
+        public async Task DeleteAllEndpoints()
+        {
+            await Task.Yield();
+
+            _endpoints.Clear();
         }
     }
 }

@@ -25,9 +25,7 @@ namespace RequestLogger.Domain.Services
         /// <returns>A previously registered endpoint of null if not found</returns>
         public async Task<Endpoint> GetEndpoint(string route, HttpMethod method)
         {
-            var endpoint = await _repository.GetEndpoint(method, route);
-
-            return endpoint;
+            return await _repository.GetEndpoint(method, route);
         }
 
         /// <summary>
@@ -70,6 +68,14 @@ namespace RequestLogger.Domain.Services
         public async Task<IList<Endpoint>> GetEndpoints()
         {
             return await _repository.GetAllEndpoints();
+        }
+
+        /// <summary>
+        /// Delete all registered endpoints
+        /// </summary>
+        public async Task ClearEndpoints()
+        {
+            await _repository.DeleteAllEndpoints();
         }
     }
 }
