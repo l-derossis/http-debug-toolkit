@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.SignalR;
 using RequestLogger.Domain.Entities;
 using RequestLogger.Domain.Services;
 using RequestLogger.Hubs;
+using Endpoint = RequestLogger.Domain.Entities.Endpoint;
 
 namespace RequestLogger.Controllers
 {
@@ -19,13 +20,13 @@ namespace RequestLogger.Controllers
     public class GenericController : ControllerBase
     {
         private readonly IHubContext<RequestsHub> _hub;
-        private readonly MockedResponseService _mockedResponseService;
+        private readonly EndpointService _endpointService;
 
-        public GenericController(IHubContext<RequestsHub> hub, MockedResponseService mockedResponseService)
+        public GenericController(IHubContext<RequestsHub> hub, EndpointService endpointService)
         {
             _hub = hub ?? throw new ArgumentNullException(nameof(hub));
-            _mockedResponseService =
-                mockedResponseService ?? throw new ArgumentNullException(nameof(mockedResponseService));
+            _endpointService =
+                endpointService ?? throw new ArgumentNullException(nameof(endpointService));
         }
 
         [HttpOptions]
@@ -41,16 +42,16 @@ namespace RequestLogger.Controllers
         {
             var serializedRequest = await SerializeRequest(Request);
 
-            var response = await _mockedResponseService.GetMockedResponse(Request.Path.Value.Replace("/api/generic", ""), new HttpMethod(Request.Method)) ?? new MockedResponse();
+            var endpoint = await _endpointService.GetEndpoint(Request.Path.Value.Replace("/api/generic", ""), new HttpMethod(Request.Method)) ?? new Endpoint();
 
             await _hub.Clients.All.SendCoreAsync("request", new []{ serializedRequest });
 
-            foreach (var (key, value) in response.Headers)
+            foreach (var (key, value) in endpoint.Headers)
             {
                 Response.Headers.Add(key, value);
             }
 
-            return StatusCode((int) response.StatusCode, response.Body);
+            return StatusCode((int)endpoint.StatusCode, endpoint.Body);
         }
 
         private async Task<string> SerializeRequest(HttpRequest request)

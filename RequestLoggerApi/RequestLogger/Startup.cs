@@ -30,8 +30,8 @@ namespace RequestLogger
                 options.AddDefaultPolicy(builder => { builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials(); });
             });
 
-            services.AddSingleton<IMockedResponseRepository, InMemoryMockedResponseRepository>();
-            services.AddScoped<MockedResponseService>();
+            services.AddSingleton<IEndpointRepository, InMemoryEndpointRepository>();
+            services.AddScoped<EndpointService>();
 
             services.AddSignalR();
             services.AddControllers(opt =>

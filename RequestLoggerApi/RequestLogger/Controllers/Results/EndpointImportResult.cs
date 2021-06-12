@@ -3,13 +3,13 @@ using RequestLogger.Domain.Errors;
 
 namespace RequestLogger.Controllers.Results
 {
-    public class ResponseImportResult
+    public class EndpointImportResult
     {
         public string Message { get; }
 
         public List<EndpointDomainError> Errors { get; }
 
-        public ResponseImportResult(string message, List<EndpointDomainError> errors = null)
+        public EndpointImportResult(string message, List<EndpointDomainError> errors = null)
         {
             Message = message;
             Errors = errors ?? new List<EndpointDomainError>();

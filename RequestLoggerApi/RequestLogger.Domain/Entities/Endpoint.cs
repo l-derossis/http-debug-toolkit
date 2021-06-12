@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace RequestLogger.Domain.Entities
 {
-    public class MockedResponse
+    public class Endpoint
     {
         private string _route;
         public string Route
