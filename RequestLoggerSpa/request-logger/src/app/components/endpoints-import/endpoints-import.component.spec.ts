@@ -7,15 +7,15 @@ import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
 import { EndpointsImportComponent } from './endpoints-import.component';
 
-describe('ResponsesImportComponent', () => {
+describe('EndpointsImportComponent', () => {
   let component: EndpointsImportComponent;
   let fixture: ComponentFixture<EndpointsImportComponent>;
 
-  let registerResponsesSuccessful = true;
+  let registerEndpointsSuccessful = true;
 
   const serviceStub: Partial<EndpointsApiService> = {
     registerEndpoints: (): Observable<any> => {
-      return registerResponsesSuccessful
+      return registerEndpointsSuccessful
         ? of({ message: 'Import successful', errors: [] })
         : of({
             message: 'Error(s) occured during the import',
@@ -55,7 +55,7 @@ describe('ResponsesImportComponent', () => {
   // STEP 1 - File import
 
   it('should not parse an invalid file', () => {
-    const file = new File([''], 'responses.json');
+    const file = new File([''], 'endpoints.json');
     component.files.push(file);
     const stepEvent = new StepperSelectionEvent();
     stepEvent.selectedIndex = 1;
@@ -66,7 +66,7 @@ describe('ResponsesImportComponent', () => {
   });
 
   it('should parse a valid file', async () => {
-    const file = new File([buildResponseFileContent(3)], 'responses.json');
+    const file = new File([buildEndpointsFileContent(3)], 'endpoints.json');
     component.files.push(file);
 
     component.fileLoading$.subscribe((loading) => {
@@ -95,11 +95,11 @@ describe('ResponsesImportComponent', () => {
     expect(errorLabel).toBeDefined();
   });
 
-  // STEP 3 - Responses upload
+  // STEP 3 - Endpoints upload
 
   it('should display the upload result message', async () => {
-    registerResponsesSuccessful = true;
-    component.endpoints = buildResponses(2);
+    registerEndpointsSuccessful = true;
+    component.endpoints = buildEndpoints(2);
 
     component.endpointsUploading$.subscribe((loading) => {
       if (!loading) {
@@ -117,8 +117,8 @@ describe('ResponsesImportComponent', () => {
   });
 
   it('should display the upload result errors', async () => {
-    registerResponsesSuccessful = false;
-    component.endpoints = buildResponses(2);
+    registerEndpointsSuccessful = false;
+    component.endpoints = buildEndpoints(2);
 
     component.endpointsUploading$.subscribe((loading) => {
       if (!loading) {
@@ -132,17 +132,17 @@ describe('ResponsesImportComponent', () => {
     component.uploadEndpoints();
   });
 
-  function buildResponseFileContent(count: number): string {
-    return JSON.stringify(buildResponses(count));
+  function buildEndpointsFileContent(count: number): string {
+    return JSON.stringify(buildEndpoints(count));
   }
 
-  function buildResponses(count: number): Endpoint[] {
-    const responses: Endpoint[] = [];
+  function buildEndpoints(count: number): Endpoint[] {
+    const endpoints: Endpoint[] = [];
 
     for (let i = 0; i < count; ++i) {
-      responses.push(new Endpoint(`/route${i}`, 'GET', 200));
+      endpoints.push(new Endpoint(`/route${i}`, 'GET', 200));
     }
 
-    return responses;
+    return endpoints;
   }
 });

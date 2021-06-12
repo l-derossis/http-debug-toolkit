@@ -37,9 +37,9 @@
     <ng-container *ngIf="endpoints.length; else empty">
       <div fxLayout="column" fxLayoutGap="10px" style="overflow: hidden" fxFill>
         <app-method-route
-          Method="{{ response.method }}"
-          Route="{{ response.route }}"
-          *ngFor="let response of endpoints; index as i"
+          *ngFor="let endpoint of endpoints; index as i"
+          Method="{{ endpoint.method }}"
+          Route="{{ endpoint.route }}"
           class="selectable-list-element"
           (click)="endpointSelected(i)"
         >

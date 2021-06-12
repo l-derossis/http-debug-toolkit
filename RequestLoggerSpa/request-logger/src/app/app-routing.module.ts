@@ -5,8 +5,8 @@ import { EndpointsComponent } from './components/endpoints/endpoints.component';
 
 const routes: Routes = [
   { path: 'log', component: RequestLoggerComponent },
-  { path: 'responses', component: EndpointsComponent },
-  { path: '', redirectTo: '/responses', pathMatch: 'full' },
+  { path: 'endpoints', component: EndpointsComponent },
+  { path: '', redirectTo: '/endpoints', pathMatch: 'full' },
 ];
 
 @NgModule({
