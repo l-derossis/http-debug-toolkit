@@ -6,16 +6,16 @@ import { EndpointCreationComponent } from '../endpoint-creation/endpoint-creatio
 import { MatSidenav } from '@angular/material/sidenav';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ResponsesImportComponent } from '../responses-import/responses-import.component';
+import { EndpointsImportComponent } from '../endpoints-import/endpoints-import.component';
 
 @Component({
-  selector: 'app-responses',
-  templateUrl: './responses.component.html',
-  styleUrls: ['./responses.component.scss'],
+  selector: 'app-endpoints',
+  templateUrl: './endpoints.component.html',
+  styleUrls: ['./endpoints.component.scss'],
 })
-export class ResponsesComponent implements OnInit {
-  responses: Endpoint[] = [];
-  selectedResponse: Endpoint | undefined;
+export class EndpointsComponent implements OnInit {
+  endpoints: Endpoint[] = [];
+  selectedEndpoint: Endpoint | undefined;
 
   private _drawer: MatSidenav | undefined;
   @ViewChild('drawer') set drawer(drawer: MatSidenav | undefined) {
@@ -29,25 +29,25 @@ export class ResponsesComponent implements OnInit {
   }
 
   constructor(
-    private responsesService: EndpointsApiService,
+    private endpointsService: EndpointsApiService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadRoutes();
+    this.loadEndpoints();
 
     this.route.queryParams.subscribe(() => {
       this.openDetailsDrawerIfRequired();
     });
   }
 
-  responseSelected(index: number): void {
+  endpointSelected(index: number): void {
     this.router.navigate([], {
       queryParams: {
-        route: this.responses[index].route,
-        method: this.responses[index].method,
+        route: this.endpoints[index].route,
+        method: this.endpoints[index].method,
       },
     });
   }
@@ -56,35 +56,35 @@ export class ResponsesComponent implements OnInit {
     const dialogRef = this.dialog.open(EndpointCreationComponent);
     dialogRef.componentInstance.routeCreatedEvent.subscribe(() => {
       dialogRef.close();
-      this.loadRoutes();
+      this.loadEndpoints();
     });
   }
 
-  openResponsesImportPopup(): void {
-    const dialogRef = this.dialog.open(ResponsesImportComponent);
+  openEndpointsImportPopup(): void {
+    const dialogRef = this.dialog.open(EndpointsImportComponent);
     dialogRef.componentInstance.done.subscribe(() => {
       dialogRef.close();
-      this.loadRoutes();
+      this.loadEndpoints();
     });
   }
 
-  loadRoutes(): void {
-    this.responsesService.getEndpoints().subscribe((r) => {
-      this.responses = r;
+  loadEndpoints(): void {
+    this.endpointsService.getEndpoints().subscribe((r) => {
+      this.endpoints = r;
 
-      const response = this.getResponseFromQueryParams();
+      const endpoint = this.getEndpointFromQueryParams();
 
-      if (response) {
+      if (endpoint) {
         this.openDetailsDrawerIfRequired();
       }
     });
   }
 
   openDetailsDrawerIfRequired(): void {
-    const response = this.getResponseFromQueryParams();
+    const endpoint = this.getEndpointFromQueryParams();
 
-    if (response) {
-      this.selectedResponse = response;
+    if (endpoint) {
+      this.selectedEndpoint = endpoint;
       this._drawer?.open();
       this._drawer?.closedStart.pipe(first()).subscribe(() => {
         this.clearRouteMethodParams();
@@ -92,13 +92,13 @@ export class ResponsesComponent implements OnInit {
     }
   }
 
-  getResponseFromQueryParams(): Endpoint | undefined {
+  getEndpointFromQueryParams(): Endpoint | undefined {
     const route: string = this.route.snapshot.queryParams.route;
     const method: string = this.route.snapshot.queryParams.method;
 
     if (!route || !method) return undefined;
 
-    return this.responses?.find(
+    return this.endpoints?.find(
       (r) =>
         r.route.toLowerCase() == route.toLowerCase() &&
         r.method.toLowerCase() == method.toLowerCase()
@@ -116,12 +116,12 @@ export class ResponsesComponent implements OnInit {
     });
   }
 
-  exportRoutes(): void {
-    this.responsesService.exportEndpointsRaw().subscribe((blob) => {
+  exportEndpoints(): void {
+    this.endpointsService.exportEndpointsRaw().subscribe((blob) => {
       const a = document.createElement('a');
       const objectUrl = URL.createObjectURL(blob);
       a.href = objectUrl;
-      a.download = 'responses.json';
+      a.download = 'endpoints.json';
       a.click();
       URL.revokeObjectURL(objectUrl);
     });

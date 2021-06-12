@@ -45,9 +45,9 @@
       <p>The following operations will be imported:</p>
       <div class="routes" *ngIf="fileIsValid; else invalidFile">
         <app-method-route
-          *ngFor="let response of responses"
-          Route="{{ response.route }}"
-          Method="{{ response.method }}"
+          *ngFor="let endpoint of endpoints"
+          Route="{{ endpoint.route }}"
+          Method="{{ endpoint.method }}"
           style="margin-top: 5px"
         ></app-method-route>
       </div>
@@ -67,7 +67,7 @@
           mat-button
           color="primary"
           matStepperNext
-          [disabled]="!responses || responses.length == 0"
+          [disabled]="!endpoints || endpoints.length == 0"
         >
           Next
         </button>
@@ -78,7 +78,7 @@
   <!-- Step 3: Upload results -->
   <mat-step #importStep>
     <ng-template matStepLabel>Import results</ng-template>
-    <div *ngIf="(responsesUploading$ | async) === false; else loader">
+    <div *ngIf="(endpointsUploading$ | async) === false; else loader">
       <p id="uploadMessage">{{ uploadResultMessage }}</p>
       <p class="error" *ngFor="let error of errors">{{ error }}</p>
       <div fxFill fxLayout="row" fxLayoutAlign="space-between center">

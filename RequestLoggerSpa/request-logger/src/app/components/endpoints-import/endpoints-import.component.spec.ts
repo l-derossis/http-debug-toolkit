@@ -5,11 +5,11 @@ import { Observable, of } from 'rxjs';
 import { Endpoint } from 'src/app/models/endpoint';
 import { EndpointsApiService } from 'src/app/services/endpoints-api.service';
 
-import { ResponsesImportComponent } from './responses-import.component';
+import { EndpointsImportComponent } from './endpoints-import.component';
 
 describe('ResponsesImportComponent', () => {
-  let component: ResponsesImportComponent;
-  let fixture: ComponentFixture<ResponsesImportComponent>;
+  let component: EndpointsImportComponent;
+  let fixture: ComponentFixture<EndpointsImportComponent>;
 
   let registerResponsesSuccessful = true;
 
@@ -37,13 +37,13 @@ describe('ResponsesImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ResponsesImportComponent],
+      declarations: [EndpointsImportComponent],
       providers: [{ provide: EndpointsApiService, useValue: serviceStub }],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ResponsesImportComponent);
+    fixture = TestBed.createComponent(EndpointsImportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -77,7 +77,7 @@ describe('ResponsesImportComponent', () => {
           By.css('app-method-route')
         );
         expect(routes.length).toBe(3);
-        expect(component.responses?.length).toBe(3);
+        expect(component.endpoints?.length).toBe(3);
       }
     });
 
@@ -99,9 +99,9 @@ describe('ResponsesImportComponent', () => {
 
   it('should display the upload result message', async () => {
     registerResponsesSuccessful = true;
-    component.responses = buildResponses(2);
+    component.endpoints = buildResponses(2);
 
-    component.responsesUploading$.subscribe((loading) => {
+    component.endpointsUploading$.subscribe((loading) => {
       if (!loading) {
         fixture.detectChanges();
         const uploadMessage = fixture.debugElement.query(
@@ -113,14 +113,14 @@ describe('ResponsesImportComponent', () => {
       }
     });
 
-    component.uploadResponses();
+    component.uploadEndpoints();
   });
 
   it('should display the upload result errors', async () => {
     registerResponsesSuccessful = false;
-    component.responses = buildResponses(2);
+    component.endpoints = buildResponses(2);
 
-    component.responsesUploading$.subscribe((loading) => {
+    component.endpointsUploading$.subscribe((loading) => {
       if (!loading) {
         fixture.detectChanges();
         const errors = fixture.debugElement.queryAll(By.css('.error'));
@@ -129,7 +129,7 @@ describe('ResponsesImportComponent', () => {
       }
     });
 
-    component.uploadResponses();
+    component.uploadEndpoints();
   });
 
   function buildResponseFileContent(count: number): string {

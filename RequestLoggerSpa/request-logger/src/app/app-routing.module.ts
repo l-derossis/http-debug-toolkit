@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
-import { ResponsesComponent } from './components/responses/responses.component';
+import { EndpointsComponent } from './components/endpoints/endpoints.component';
 
 const routes: Routes = [
   { path: 'log', component: RequestLoggerComponent },
-  { path: 'responses', component: ResponsesComponent },
+  { path: 'responses', component: EndpointsComponent },
   { path: '', redirectTo: '/responses', pathMatch: 'full' },
 ];
 
