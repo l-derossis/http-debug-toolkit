@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
 namespace RequestLogger.Tests.Data
 {
@@ -27,6 +28,7 @@ namespace RequestLogger.Tests.Data
             var saved = await _repository.GetEndpoint(method, route);
             saved.Route.Should().Be(route);
             saved.Method.Should().Be(method);
+            saved.Id.Should().NotBe(default(string));
         }
 
         [TestMethod]
@@ -49,6 +51,18 @@ namespace RequestLogger.Tests.Data
         }
 
         [TestMethod]
+        public async Task RegisterEndpoint_DeepCopy()
+        {
+            var endpoint = CreateEndpoint("/original", HttpMethod.Get);
+
+            await _repository.RegisterEndpoint(endpoint);
+            endpoint.Route = "/updated";
+            var storedEndpoint = (await _repository.GetAllEndpoints()).Single();
+
+            storedEndpoint.Route.Should().Be("/original");
+;        }
+
+        [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public async Task RegisterEndpoints_Duplicate()
         {
@@ -60,6 +74,8 @@ namespace RequestLogger.Tests.Data
             await _repository.RegisterEndpoint(resp2);
             await _repository.GetEndpoint(resp1.Method, resp1.Route);
         }
+
+        
 
         [TestMethod]
         [DataRow("route", null)]
@@ -78,6 +94,55 @@ namespace RequestLogger.Tests.Data
 
             endpoint.Should().BeNull();
 ;       }
+
+        [TestMethod]
+        public async Task UpdateEndpoint_Success()
+        {
+            var endpoint = CreateEndpoint("/route", HttpMethod.Get);
+            await _repository.RegisterEndpoint(endpoint);
+
+            var registered = (await _repository.GetAllEndpoints()).Single();
+            registered.Body = "new content";
+            await _repository.UpdateEndpoint(registered);
+
+            var updated = (await _repository.GetAllEndpoints()).Single();
+            updated.Body.Should().Be("new content");
+        }
+
+        [TestMethod]
+        public void UpdateEndpoint_NotFound()
+        {
+            var endpoint = CreateEndpoint("/route", HttpMethod.Get);
+            endpoint.Id = Guid.NewGuid().ToString();
+
+            Func<Task> act = async () => await _repository.UpdateEndpoint(endpoint);
+            act.Should().Throw<InvalidOperationException>().WithMessage("No endpoint found with the ID*");
+        }
+
+        [TestMethod]
+        public void UpdateEndpoint_NoId()
+        {
+            var endpoint = CreateEndpoint("/route", HttpMethod.Get);
+
+            Func<Task> act = async () => await _repository.UpdateEndpoint(endpoint);
+            act.Should().Throw<ArgumentException>().WithMessage("The endpoint does not come from the database context (no ID)");
+        }
+
+        [TestMethod]
+        [DataRow("/route", "/newRoute", "get", "get")]
+        [DataRow("/route", "/route", "get", "post")]
+        public async Task UpdateEndpoint_ForbiddenUpdate(string route, string newRoute, string method, string newMethod)
+        {
+            var endpoint = CreateEndpoint(route, new HttpMethod(method));
+            await _repository.RegisterEndpoint(endpoint);
+
+            var registered = (await _repository.GetAllEndpoints()).Single();
+            registered.Route = newRoute;
+            registered.Method = new HttpMethod(newMethod);
+            Func<Task> act = async () => await _repository.UpdateEndpoint(registered);
+
+            act.Should().Throw<ArgumentException>().WithMessage("Route and method cannot be updated.");
+        }
 
         [TestMethod]
         public async Task GetAllEndpoints_Empty()

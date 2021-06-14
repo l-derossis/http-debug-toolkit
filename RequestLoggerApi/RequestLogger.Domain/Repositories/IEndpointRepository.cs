@@ -7,9 +7,11 @@ namespace RequestLogger.Domain.Repositories
 {
     public interface IEndpointRepository
     {
-        Task<Endpoint> GetEndpoint(HttpMethod httpMethod, string route);
+        Task<Endpoint> GetEndpoint(HttpMethod method, string route);
 
         Task RegisterEndpoint(Endpoint endpoint);
+
+        Task UpdateEndpoint(Endpoint endpoint);
 
         Task<IList<Endpoint>> GetAllEndpoints();
 

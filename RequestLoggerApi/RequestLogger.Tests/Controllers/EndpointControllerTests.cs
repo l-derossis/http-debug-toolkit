@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,20 +11,23 @@ using RequestLogger.Domain.Services;
 using RequestLogger.Dtos;
 using RequestLogger.Infrastructure.Data;
 using System.Threading.Tasks;
+using Moq;
+using RequestLogger.Domain.Entities;
 
 namespace RequestLogger.Tests.Controllers
 {
     [TestClass]
     public class EndpointControllerTests
     {
+        private EndpointService _service;
         private EndpointController _controller;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var repository = new InMemoryEndpointRepository();
-            var service = new EndpointService(repository);
-            _controller = new EndpointController(service);
+            _service = new EndpointService(repository);
+            _controller = new EndpointController(_service);
         }
 
         [TestMethod]
@@ -36,7 +42,10 @@ namespace RequestLogger.Tests.Controllers
             };
 
             var result = await _controller.RegisterEndpoint(dto);
-            result.Should().BeOfType<OkResult>();
+            var cast = (CreatedAtActionResult) result;
+            cast.ActionName.Should().Be(nameof(_controller.GetEndpoint));
+            cast.RouteValues["route"].Should().Be("/route");
+            cast.RouteValues["method"].Should().Be(HttpMethod.Get);
         }
 
         [TestMethod]
@@ -73,6 +82,30 @@ namespace RequestLogger.Tests.Controllers
             var result = await _controller.RegisterEndpoint(dto);
 
             result.Should().BeOfType<ConflictObjectResult>();
+        }
+
+        [TestMethod]
+        public async Task GetEndpoint_Success()
+        {
+            var endpoint = new Endpoint
+            {
+                Route = "/route/1",
+                Method = HttpMethod.Get
+            };
+            await _service.RegisterEndpoint(endpoint);
+
+            var result = await _controller.GetEndpoint("/route/1", "get");
+
+            result.Value.Route.Should().Be("/route/1");
+            result.Value.Method.Should().Be("GET");
+        }
+
+        [TestMethod]
+        public async Task GetEndpoint_NotFound()
+        {
+            var result = await _controller.GetEndpoint("/route/1", "get");
+
+            result.Result.Should().BeOfType(typeof(NotFoundResult));
         }
 
         [TestMethod]
@@ -169,6 +202,58 @@ namespace RequestLogger.Tests.Controllers
             var result = await _controller.ClearAllEndpoints();
 
             result.Should().BeOfType<OkResult>();
+        }
+
+        [TestMethod]
+        public async Task CreateOrUpdateEndpoint_Success()
+        {
+            var dto = new EndpointDto{
+                Route = "/test",
+                Method = "get",
+                StatusCode = 200
+            };
+            await _controller.RegisterEndpoint(dto);
+
+            var newDto = new EndpointDto{
+                StatusCode = 200,
+                Body = "new body"
+            };
+            var result = await _controller.CreateOrUpdateEndpoint("%2Ftest", "get", newDto);
+
+            result.Should().BeOfType<NoContentResult>();
+            var updated = (await _controller.GetEndpoint(dto.Route, dto.Method)).Value;
+            updated.Body.Should().Be("new body");
+        }
+
+        [TestMethod]
+        public async Task CreateOrUpdateEndpoint_BadRequest_Exception()
+        {
+            await TestBadRequest<InvalidOperationException>();
+            await TestBadRequest<ArgumentException>();
+        }
+
+        private async Task TestBadRequest<T>() where T : Exception
+        {
+            var mock = new Mock<IEndpointService>();
+            mock.Setup(s => s.UpdateEndpoint(It.IsAny<Endpoint>())).ThrowsAsync((T)Activator.CreateInstance(typeof(T), "error message"));
+            mock.Setup(s => s.GetEndpoint(It.IsAny<string>(), It.IsAny<HttpMethod>())).ReturnsAsync(new Endpoint());
+            var controller = new EndpointController(mock.Object);
+
+            var dto = CreateEndpointDto();
+            var result = await controller.CreateOrUpdateEndpoint(dto.Route, dto.Method, dto);
+
+            var castResult = (BadRequestObjectResult)result;
+            castResult.Value = "error message";
+        }
+
+        private EndpointDto CreateEndpointDto()
+        {
+            return new EndpointDto
+            {
+                Route = "/route",
+                Method = "get",
+                StatusCode = 200
+            };
         }
     }
 }
