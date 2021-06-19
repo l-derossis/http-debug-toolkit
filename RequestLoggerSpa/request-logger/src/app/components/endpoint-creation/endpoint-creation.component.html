@@ -30,57 +30,9 @@
   </div>
 
   <mat-dialog-content>
-    <mat-tab-group fxFlex>
-      <mat-tab label="Body">
-        <div>
-          <mat-form-field appearance="fill" fxFlex>
-            <textarea matInput formControlName="body" class="tab"></textarea>
-          </mat-form-field>
-        </div>
-      </mat-tab>
-      <mat-tab label="Headers" fxFlex>
-        <div formArrayName="headers" class="tab">
-          <div
-            *ngFor="let _ of headers.controls; index as i"
-            fxLayout="row"
-            fxLayoutGap="20px"
-            fxLayoutAlign="start center"
-          >
-            <ng-container [formGroupName]="i">
-              <mat-form-field>
-                <mat-label>Data key</mat-label>
-                <input
-                  formControlName="key"
-                  #key
-                  matInput
-                  placeholder="Key"
-                  (input)="onHeaderInput(i)"
-                />
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label fxFill>Value</mat-label>
-                <input
-                  formControlName="value"
-                  matInput
-                  placeholder="Value"
-                  (input)="onHeaderInput(i)"
-                />
-              </mat-form-field>
-
-              <button
-                *ngIf="headers.controls.length > 1"
-                mat-icon-button
-                color="primary"
-                (click)="deleteHeader(i)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </ng-container>
-          </div>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
+    <app-endpoint-response-form
+      [requestForm]="requestForm"
+    ></app-endpoint-response-form>
   </mat-dialog-content>
   <button #submitButton mat-raised-button color="primary" (click)="submit()">
     Create

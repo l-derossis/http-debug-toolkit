@@ -6,9 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.SignalR;
-using RequestLogger.Domain.Entities;
 using RequestLogger.Domain.Services;
 using RequestLogger.Hubs;
 using Endpoint = RequestLogger.Domain.Entities.Endpoint;
@@ -20,9 +18,9 @@ namespace RequestLogger.Controllers
     public class GenericController : ControllerBase
     {
         private readonly IHubContext<RequestsHub> _hub;
-        private readonly EndpointService _endpointService;
+        private readonly IEndpointService _endpointService;
 
-        public GenericController(IHubContext<RequestsHub> hub, EndpointService endpointService)
+        public GenericController(IHubContext<RequestsHub> hub, IEndpointService endpointService)
         {
             _hub = hub ?? throw new ArgumentNullException(nameof(hub));
             _endpointService =

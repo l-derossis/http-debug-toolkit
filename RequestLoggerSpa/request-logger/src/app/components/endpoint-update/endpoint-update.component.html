@@ -1,0 +1,14 @@
+<ng-container [formGroup]="endpointForm">
+  <app-method-route
+    Method="{{ endpoint?.method }}"
+    Route="{{ endpoint?.route }}"
+  ></app-method-route>
+
+  <app-endpoint-response-form
+    [requestForm]="endpointForm"
+  ></app-endpoint-response-form>
+
+  <button #submitButton mat-raised-button color="primary" (click)="submit()">
+    Update
+  </button>
+</ng-container>

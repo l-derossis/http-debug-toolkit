@@ -69,6 +69,9 @@
     class="details-drawer"
     position="end"
   >
-    <app-endpoint-details [endpoint]="selectedEndpoint"></app-endpoint-details>
+    <app-endpoint-update
+      [endpoint]="selectedEndpoint"
+      (endpointUpdated)="endpointUdpated()"
+    ></app-endpoint-update>
   </mat-drawer>
 </mat-drawer-container>

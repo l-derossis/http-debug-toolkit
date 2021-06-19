@@ -92,6 +92,11 @@ export class EndpointsComponent implements OnInit {
     }
   }
 
+  endpointUdpated(): void {
+    this._drawer?.close();
+    this.loadEndpoints();
+  }
+
   clearEndpoints(): void {
     this.endpointsService
       .clearEndpoints()

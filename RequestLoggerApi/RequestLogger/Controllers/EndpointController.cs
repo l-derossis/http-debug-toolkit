@@ -4,11 +4,8 @@ using RequestLogger.Domain.Services;
 using RequestLogger.Dtos;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using RequestLogger.Controllers.Results;
 
@@ -52,7 +49,7 @@ namespace RequestLogger.Controllers
                 return Conflict(e.Message);
             }
 
-            return CreatedAtAction(nameof(GetEndpoint), new { route = endpoint.Route, method = endpoint.Method}, dto);
+            return CreatedAtAction(nameof(GetEndpoint), new { route = endpoint.Route, method = endpoint.Method }, dto);
         }
 
         [HttpGet]
@@ -115,7 +112,7 @@ namespace RequestLogger.Controllers
 
                 return NoContent();
             }
-            catch (Exception e) when ( e is InvalidOperationException || e is ArgumentException)
+            catch (Exception e) when (e is InvalidOperationException || e is ArgumentException)
             {
                 return BadRequest(e.Message);
             }
@@ -142,7 +139,17 @@ namespace RequestLogger.Controllers
         {
             var endpoints = await _service.GetEndpoints();
 
-            var dtos = endpoints.Select(EndpointDto.FromEntity).ToList();
+            var dtos = endpoints.Select(e =>
+            {
+                var dto = EndpointDto.FromEntity(e);
+                dto.Location = Request.PathBase +
+                    Url.Action(nameof(GetEndpoint),
+                        "Endpoint",
+                        new { route = e.Route, method = e.Method },
+                        Request.Scheme,
+                        Request.Host.Value);
+                return dto;
+            }).ToList();
 
             return dtos;
         }
