@@ -11,12 +11,10 @@
   <mat-tab-group *ngIf="requestForm">
     <mat-tab label="Body">
       <div class="tab">
-        <mat-form-field appearance="fill">
-          <textarea matInput formControlName="body"></textarea>
-        </mat-form-field>
+        <textarea formControlName="body" spellcheck="false"></textarea>
       </div>
     </mat-tab>
-    <mat-tab label="Headers" fxFlex>
+    <mat-tab label="Headers">
       <div formArrayName="headers" class="tab headers">
         <div
           *ngFor="let _ of requestForm.headersControl.controls; index as i"

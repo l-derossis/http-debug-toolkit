@@ -1,8 +1,8 @@
 :host {
   display: flex;
   flex-direction: column;
+  height: calc(100% - 30px);
   padding: 15px;
-  height: 95%;
 }
 
 app-method-route {
@@ -11,14 +11,17 @@ app-method-route {
 
 app-endpoint-response-form {
   flex-grow: 1;
+  margin-bottom: 15px;
 }
 
-.response-success {
-  margin-bottom: 15px;
-  color: #4bb543;
-}
+.response {
+  margin: 15px 0 15px 0;
 
-.response-failure {
-  margin-bottom: 15px;
-  color: red;
+  &.success {
+    color: #4bb543;
+  }
+
+  &.failure {
+    color: red;
+  }
 }

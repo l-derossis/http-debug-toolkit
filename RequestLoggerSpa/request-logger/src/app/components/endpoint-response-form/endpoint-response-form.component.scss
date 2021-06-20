@@ -6,6 +6,7 @@
 
 mat-tab-group {
   flex-grow: 1;
+  max-height: 90%;
 
   ::ng-deep {
     .mat-tab-body-wrapper {
@@ -21,34 +22,28 @@ mat-tab-group {
       }
     }
 
+    .tab-content {
+      padding: 10px;
+    }
+
     .tab {
       width: 100%;
-      height: 100%;
+      display: flex;
 
-      mat-form-field {
-        height: 95%;
-        width: 100%;
-
-        .mat-form-field-wrapper,
-        .mat-form-field-flex,
-        .mat-form-field-infix {
-          height: 100%;
-        }
-
-        textarea {
-          height: 95%;
-          resize: none;
-        }
+      textarea {
+        flex-grow: 1;
+        resize: none;
+        border: none;
+        outline: none;
+        background-color: rgba(0, 0, 0, 0.04);
+        padding: 10px;
+        font: inherit;
       }
 
       &.headers {
+        flex-direction: column;
         padding-top: 15px;
-        max-height: 95%;
       }
-    }
-
-    .tab-content {
-      padding: 10px;
     }
   }
 }
