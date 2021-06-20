@@ -8,9 +8,8 @@ describe('EndpointResponseFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EndpointResponseFormComponent ]
-    })
-    .compileComponents();
+      declarations: [EndpointResponseFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
