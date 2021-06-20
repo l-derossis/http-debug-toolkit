@@ -10,6 +10,12 @@ import {
 import { Endpoint } from 'src/app/models/endpoint';
 
 export class EndpointForm extends FormGroup {
+  private readonly headersControlName = 'headers';
+  private readonly bodyControlName = 'body';
+  private readonly statusCodeControlName = 'statusCode';
+  private readonly routeControlName = 'route';
+  private readonly methodControlName = 'method';
+
   constructor() {
     super({
       route: new FormControl('/', [
@@ -21,7 +27,7 @@ export class EndpointForm extends FormGroup {
   }
 
   get headersControl(): FormArray {
-    return this.get('headers') as FormArray;
+    return this.get(this.headersControlName) as FormArray;
   }
 
   set headers(headers: Map<string, string>) {
@@ -35,13 +41,17 @@ export class EndpointForm extends FormGroup {
   }
 
   set body(body: string) {
-    this.get('body')?.setValue(body);
+    this.get(this.bodyControlName)?.setValue(body);
+  }
+
+  set statusCode(statusCode: number) {
+    this.get(this.statusCodeControlName)?.setValue(statusCode);
   }
 
   addStatusCodeControl(): EndpointForm {
-    if (!this.contains('statusCode')) {
+    if (!this.contains(this.statusCodeControlName)) {
       this.addControl(
-        'statusCode',
+        this.statusCodeControlName,
         new FormControl('200', [Validators.required])
       );
     }
@@ -50,16 +60,19 @@ export class EndpointForm extends FormGroup {
   }
 
   addHeadersControl(): EndpointForm {
-    if (!this.contains('headers')) {
-      this.addControl('headers', new FormArray([this.createHeader()]));
+    if (!this.contains(this.headersControlName)) {
+      this.addControl(
+        this.headersControlName,
+        new FormArray([this.createHeader()])
+      );
     }
 
     return this;
   }
 
   addBodyControl(): EndpointForm {
-    if (!this.contains('body')) {
-      this.addControl('body', new FormControl());
+    if (!this.contains(this.bodyControlName)) {
+      this.addControl(this.bodyControlName, new FormControl());
     }
 
     return this;
@@ -87,30 +100,30 @@ export class EndpointForm extends FormGroup {
   }
 
   clear(): void {
-    if (this.contains('headers')) {
-      this.removeControl('headers');
+    if (this.contains(this.headersControlName)) {
+      this.removeControl(this.headersControlName);
       this.addHeadersControl();
     }
 
-    if (this.contains('body')) {
-      this.removeControl('body');
+    if (this.contains(this.bodyControlName)) {
+      this.removeControl(this.bodyControlName);
       this.addBodyControl();
     }
 
-    if (this.contains('statusCode')) {
-      this.removeControl('statusCode');
+    if (this.contains(this.statusCodeControlName)) {
+      this.removeControl(this.statusCodeControlName);
       this.addStatusCodeControl();
     }
 
-    this.get('route')?.setValue('/');
-    this.get('method')?.setValue('GET');
+    this.get(this.routeControlName)?.setValue('/');
+    this.get(this.methodControlName)?.setValue('GET');
   }
 
   asModel(): Endpoint {
-    const route = this.get('route')?.value;
-    const method = this.get('method')?.value;
-    const statusCode = this.get('statusCode')?.value;
-    const body = this.get('body')?.value;
+    const route = this.get(this.routeControlName)?.value;
+    const method = this.get(this.methodControlName)?.value;
+    const statusCode = this.get(this.statusCodeControlName)?.value;
+    const body = this.get(this.bodyControlName)?.value;
 
     const endpoint = new Endpoint(route, method, statusCode, body);
 

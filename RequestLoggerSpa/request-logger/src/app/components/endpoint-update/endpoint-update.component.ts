@@ -28,6 +28,7 @@ export class EndpointUpdateComponent {
     if (this._endpoint) {
       this.responseForm.body = this._endpoint.body ?? '';
       this.responseForm.headers = this._endpoint.headersMap;
+      this.responseForm.statusCode = this._endpoint.statusCode;
     }
   }
 
@@ -39,14 +40,32 @@ export class EndpointUpdateComponent {
 
   endpointForm: EndpointForm = new EndpointForm().addStatusCodeControl();
 
+  updateResponse:
+    | {
+        message: string;
+        successful: boolean;
+      }
+    | undefined = undefined;
+
   constructor(private apiService: EndpointsApiService) {}
 
   submit(): void {
     const endpoint = this.endpointForm.asModel();
     endpoint.location = this._endpoint?.location;
 
-    this.apiService
-      .updateEndpoint(endpoint)
-      .subscribe((_) => this.endpointUpdated.emit());
+    this.apiService.updateEndpoint(endpoint).subscribe(
+      () => {
+        this.updateResponse = {
+          message: 'Update successful',
+          successful: true,
+        };
+      },
+      (e) => {
+        this.updateResponse = {
+          message: e.error,
+          successful: false,
+        };
+      }
+    );
   }
 }

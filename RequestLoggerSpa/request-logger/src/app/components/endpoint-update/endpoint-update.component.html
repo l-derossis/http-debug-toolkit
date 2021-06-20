@@ -8,6 +8,13 @@
     [requestForm]="endpointForm"
   ></app-endpoint-response-form>
 
+  <span
+    [ngClass]="
+      updateResponse?.successful ? 'response-success' : 'response-failure'
+    "
+    >{{ updateResponse?.message }}</span
+  >
+
   <button #submitButton mat-raised-button color="primary" (click)="submit()">
     Update
   </button>

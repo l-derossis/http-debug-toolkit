@@ -7,32 +7,23 @@
     >
   </mat-form-field>
 
-  <div fxLayout="row" fxLayoutGap="10px">
-    <mat-form-field appearance="fill">
-      <mat-label>Method</mat-label>
-      <mat-select formControlName="method">
-        <mat-option value="GET">GET</mat-option>
-        <mat-option value="POST">POST</mat-option>
-        <mat-option value="PUT">PUT</mat-option>
-        <mat-option value="PATCH">PATCH</mat-option>
-        <mat-option value="DELETE">DELETE</mat-option>
-        <mat-option value="HEAD">HEAD</mat-option>
-        <mat-option value="OPTIONS">OPTIONS</mat-option>
-        <mat-option value="CONNECT">CONNECT</mat-option>
-        <mat-option value="TRACE">TRACE</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Status code</mat-label>
-      <input matInput type="number" formControlName="statusCode" />
-    </mat-form-field>
-  </div>
-
   <mat-dialog-content>
-    <app-endpoint-response-form
-      [requestForm]="requestForm"
-    ></app-endpoint-response-form>
+    <app-endpoint-response-form [requestForm]="requestForm">
+      <mat-form-field method appearance="fill">
+        <mat-label>Method</mat-label>
+        <mat-select formControlName="method">
+          <mat-option value="GET">GET</mat-option>
+          <mat-option value="POST">POST</mat-option>
+          <mat-option value="PUT">PUT</mat-option>
+          <mat-option value="PATCH">PATCH</mat-option>
+          <mat-option value="DELETE">DELETE</mat-option>
+          <mat-option value="HEAD">HEAD</mat-option>
+          <mat-option value="OPTIONS">OPTIONS</mat-option>
+          <mat-option value="CONNECT">CONNECT</mat-option>
+          <mat-option value="TRACE">TRACE</mat-option>
+        </mat-select>
+      </mat-form-field></app-endpoint-response-form
+    >
   </mat-dialog-content>
   <button #submitButton mat-raised-button color="primary" (click)="submit()">
     Create

@@ -9,7 +9,8 @@ import { EndpointForm } from 'src/app/utils/forms/endpoint-form';
 export class EndpointResponseFormComponent {
   private _requestForm: EndpointForm = new EndpointForm()
     .addHeadersControl()
-    .addBodyControl();
+    .addBodyControl()
+    .addStatusCodeControl();
 
   get requestForm(): EndpointForm {
     return this._requestForm;
@@ -17,7 +18,10 @@ export class EndpointResponseFormComponent {
 
   @Input() set requestForm(value: EndpointForm) {
     this._requestForm = value;
-    this._requestForm?.addHeadersControl().addBodyControl();
+    this._requestForm
+      ?.addHeadersControl()
+      .addBodyControl()
+      .addStatusCodeControl();
   }
 
   set body(body: string) {
@@ -26,6 +30,10 @@ export class EndpointResponseFormComponent {
 
   set headers(headers: Map<string, string>) {
     this._requestForm.headers = headers;
+  }
+
+  set statusCode(statusCode: number) {
+    this._requestForm.statusCode = statusCode;
   }
 
   onHeaderInput(index: number): void {

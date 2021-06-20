@@ -3,3 +3,17 @@
   flex-direction: column;
   padding: 15px;
 }
+
+app-method-route {
+  margin-bottom: 15px;
+}
+
+.response-success {
+  margin-bottom: 15px;
+  color: #4bb543;
+}
+
+.response-failure {
+  margin-bottom: 15px;
+  color: red;
+}
