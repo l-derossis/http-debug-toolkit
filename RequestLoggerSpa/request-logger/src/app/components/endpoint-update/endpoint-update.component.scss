@@ -2,10 +2,15 @@
   display: flex;
   flex-direction: column;
   padding: 15px;
+  height: 95%;
 }
 
 app-method-route {
   margin-bottom: 15px;
+}
+
+app-endpoint-response-form {
+  flex-grow: 1;
 }
 
 .response-success {
