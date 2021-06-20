@@ -22,6 +22,7 @@ export class EndpointUpdateComponent {
   private _endpoint: Endpoint | undefined = undefined;
 
   @Input() set endpoint(value: Endpoint | undefined) {
+    this.updateResponse = undefined;
     this.endpointForm.clear();
     this._endpoint = value?.clone();
 
