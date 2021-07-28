@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +11,8 @@ using RequestLogger.Dtos;
 using RequestLogger.Infrastructure.Data;
 using System.Threading.Tasks;
 using Moq;
-using RequestLogger.Domain.Entities;
+using RequestLogger.Tests.Utils;
+using Endpoint = RequestLogger.Domain.Entities.Endpoint;
 
 namespace RequestLogger.Tests.Controllers
 {
@@ -113,14 +113,14 @@ namespace RequestLogger.Tests.Controllers
         {
             var dtos = new List<EndpointDto>
             {
-                new EndpointDto
+                new()
                 {
                     Body = "content",
                     Method = "GET",
                     Route = "/route1",
                     StatusCode = 200
                 },
-                new EndpointDto
+                new()
                 {
                     Body = "content",
                     Method = "GET",
@@ -139,14 +139,14 @@ namespace RequestLogger.Tests.Controllers
         {
             var dtos = new List<EndpointDto>
             {
-                new EndpointDto
+                new()
                 {
                     Body = "content",
                     Method = "GET",
                     Route = "/route",
                     StatusCode = 200
                 },
-                new EndpointDto
+                new()
                 {
                     Body = "content",
                     Method = "GET",
@@ -175,6 +175,10 @@ namespace RequestLogger.Tests.Controllers
         [TestMethod]
         public async Task GetEndpoints_MultipleElements()
         {
+            _controller.InjectDefaultHttpContext();
+            _controller.MockUrlHelper();
+            _controller.HttpContext.Request.PathBase = "";
+
             await _controller.RegisterEndpoint(new EndpointDto
             {
                 Body = "body",

@@ -10,11 +10,11 @@ import {
 import { Endpoint } from 'src/app/models/endpoint';
 
 export class EndpointForm extends FormGroup {
-  private readonly headersControlName = 'headers';
-  private readonly bodyControlName = 'body';
-  private readonly statusCodeControlName = 'statusCode';
-  private readonly routeControlName = 'route';
-  private readonly methodControlName = 'method';
+  public static readonly headersControlName = 'headers';
+  public static readonly bodyControlName = 'body';
+  public static readonly statusCodeControlName = 'statusCode';
+  public static readonly routeControlName = 'route';
+  public static readonly methodControlName = 'method';
 
   constructor() {
     super({
@@ -27,10 +27,14 @@ export class EndpointForm extends FormGroup {
   }
 
   get headersControl(): FormArray {
-    return this.get(this.headersControlName) as FormArray;
+    return this.get(EndpointForm.headersControlName) as FormArray;
   }
 
   set headers(headers: Map<string, string>) {
+    if (!this.headersControl) {
+      this.addHeadersControl();
+    }
+
     while (this.headersControl.length !== 0) {
       this.headersControl.removeAt(0);
     }
@@ -41,17 +45,17 @@ export class EndpointForm extends FormGroup {
   }
 
   set body(body: string) {
-    this.get(this.bodyControlName)?.setValue(body);
+    this.get(EndpointForm.bodyControlName)?.setValue(body);
   }
 
   set statusCode(statusCode: number) {
-    this.get(this.statusCodeControlName)?.setValue(statusCode);
+    this.get(EndpointForm.statusCodeControlName)?.setValue(statusCode);
   }
 
   addStatusCodeControl(): EndpointForm {
-    if (!this.contains(this.statusCodeControlName)) {
+    if (!this.contains(EndpointForm.statusCodeControlName)) {
       this.addControl(
-        this.statusCodeControlName,
+        EndpointForm.statusCodeControlName,
         new FormControl('200', [Validators.required])
       );
     }
@@ -60,9 +64,9 @@ export class EndpointForm extends FormGroup {
   }
 
   addHeadersControl(): EndpointForm {
-    if (!this.contains(this.headersControlName)) {
+    if (!this.contains(EndpointForm.headersControlName)) {
       this.addControl(
-        this.headersControlName,
+        EndpointForm.headersControlName,
         new FormArray([this.createHeader()])
       );
     }
@@ -71,8 +75,8 @@ export class EndpointForm extends FormGroup {
   }
 
   addBodyControl(): EndpointForm {
-    if (!this.contains(this.bodyControlName)) {
-      this.addControl(this.bodyControlName, new FormControl());
+    if (!this.contains(EndpointForm.bodyControlName)) {
+      this.addControl(EndpointForm.bodyControlName, new FormControl());
     }
 
     return this;
@@ -82,6 +86,10 @@ export class EndpointForm extends FormGroup {
     key: string | undefined = undefined,
     value: string | undefined = undefined
   ): void {
+    if (!this.headersControl) {
+      this.addHeadersControl();
+    }
+
     this.headersControl.push(this.createHeader(key, value));
   }
 
@@ -100,30 +108,30 @@ export class EndpointForm extends FormGroup {
   }
 
   clear(): void {
-    if (this.contains(this.headersControlName)) {
-      this.removeControl(this.headersControlName);
+    if (this.contains(EndpointForm.headersControlName)) {
+      this.removeControl(EndpointForm.headersControlName);
       this.addHeadersControl();
     }
 
-    if (this.contains(this.bodyControlName)) {
-      this.removeControl(this.bodyControlName);
+    if (this.contains(EndpointForm.bodyControlName)) {
+      this.removeControl(EndpointForm.bodyControlName);
       this.addBodyControl();
     }
 
-    if (this.contains(this.statusCodeControlName)) {
-      this.removeControl(this.statusCodeControlName);
+    if (this.contains(EndpointForm.statusCodeControlName)) {
+      this.removeControl(EndpointForm.statusCodeControlName);
       this.addStatusCodeControl();
     }
 
-    this.get(this.routeControlName)?.setValue('/');
-    this.get(this.methodControlName)?.setValue('GET');
+    this.get(EndpointForm.routeControlName)?.setValue('/');
+    this.get(EndpointForm.methodControlName)?.setValue('GET');
   }
 
   asModel(): Endpoint {
-    const route = this.get(this.routeControlName)?.value;
-    const method = this.get(this.methodControlName)?.value;
-    const statusCode = this.get(this.statusCodeControlName)?.value;
-    const body = this.get(this.bodyControlName)?.value;
+    const route = this.get(EndpointForm.routeControlName)?.value;
+    const method = this.get(EndpointForm.methodControlName)?.value;
+    const statusCode = this.get(EndpointForm.statusCodeControlName)?.value;
+    const body = this.get(EndpointForm.bodyControlName)?.value;
 
     const endpoint = new Endpoint(route, method, statusCode, body);
 
