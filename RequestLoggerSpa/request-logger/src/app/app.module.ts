@@ -28,8 +28,9 @@ import { AppComponent } from './app.component';
 import { RequestLoggerComponent } from './components/request-logger/request-logger.component';
 import { EndpointsComponent } from './components/endpoints/endpoints.component';
 import { EndpointCreationComponent } from './components/endpoint-creation/endpoint-creation.component';
-import { EndpointDetailsComponent } from './components/endpoint-details/endpoint-details.component';
 import { EndpointsImportComponent } from './components/endpoints-import/endpoints-import.component';
+import { EndpointUpdateComponent } from './components/endpoint-update/endpoint-update.component';
+import { EndpointResponseFormComponent } from './components/endpoint-response-form/endpoint-response-form.component';
 
 @NgModule({
   declarations: [
@@ -37,9 +38,10 @@ import { EndpointsImportComponent } from './components/endpoints-import/endpoint
     RequestLoggerComponent,
     EndpointsComponent,
     EndpointCreationComponent,
-    EndpointDetailsComponent,
     MethodRouteComponent,
     EndpointsImportComponent,
+    EndpointUpdateComponent,
+    EndpointResponseFormComponent,
   ],
   imports: [
     HttpClientModule,

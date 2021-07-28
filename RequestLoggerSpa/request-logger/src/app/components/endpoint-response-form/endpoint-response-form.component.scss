@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-flow: column;
+  min-height: 400px;
+}
+
+mat-tab-group {
+  flex-grow: 1;
+  max-height: 90%;
+
+  ::ng-deep {
+    .mat-tab-body-wrapper {
+      flex-grow: 1;
+    }
+
+    .mat-tab-body {
+      flex-grow: 1;
+
+      .mat-tab-body-content {
+        display: flex;
+        height: 100%;
+      }
+    }
+
+    .tab-content {
+      padding: 10px;
+    }
+
+    .tab {
+      width: 100%;
+      display: flex;
+
+      textarea {
+        flex-grow: 1;
+        resize: none;
+        border: none;
+        outline: none;
+        background-color: rgba(0, 0, 0, 0.04);
+        padding: 10px;
+        font: inherit;
+      }
+
+      &.headers {
+        flex-direction: column;
+        padding-top: 15px;
+      }
+    }
+  }
+}

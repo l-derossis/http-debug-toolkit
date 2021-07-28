@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 30px);
+  padding: 15px;
+}
+
+app-method-route {
+  margin-bottom: 15px;
+}
+
+app-endpoint-response-form {
+  flex-grow: 1;
+  margin-bottom: 15px;
+}
+
+.response {
+  margin: 15px 0 15px 0;
+
+  &.success {
+    color: #4bb543;
+  }
+
+  &.failure {
+    color: red;
+  }
+}

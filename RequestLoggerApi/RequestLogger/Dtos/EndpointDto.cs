@@ -18,6 +18,8 @@ namespace RequestLogger.Dtos
 
         public int? StatusCode { get; set; }
 
+        public string Location { get; set; }
+
         public Endpoint ToEntity()
         {
             return new Endpoint

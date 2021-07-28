@@ -31,7 +31,7 @@ namespace RequestLogger
             });
 
             services.AddSingleton<IEndpointRepository, InMemoryEndpointRepository>();
-            services.AddScoped<EndpointService>();
+            services.AddScoped<IEndpointService, EndpointService>();
 
             services.AddSignalR();
             services.AddControllers(opt =>

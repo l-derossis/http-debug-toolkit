@@ -30,6 +30,14 @@
       >
         IMPORT
       </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="clearEndpoints()"
+        fxFlex
+      >
+        CLEAR
+      </button>
     </div>
   </mat-drawer>
 
@@ -61,6 +69,9 @@
     class="details-drawer"
     position="end"
   >
-    <app-endpoint-details [endpoint]="selectedEndpoint"></app-endpoint-details>
+    <app-endpoint-update
+      [endpoint]="selectedEndpoint"
+      (endpointUpdated)="endpointUdpated()"
+    ></app-endpoint-update>
   </mat-drawer>
 </mat-drawer-container>

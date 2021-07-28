@@ -8,7 +8,7 @@ using RequestLogger.Domain.Repositories;
 
 namespace RequestLogger.Domain.Services
 {
-    public class EndpointService
+    public class EndpointService : IEndpointService
     {
         private readonly IEndpointRepository _repository;
 
@@ -17,33 +17,16 @@ namespace RequestLogger.Domain.Services
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        /// <summary>
-        /// Get an endpoint.
-        /// </summary>
-        /// <param name="route">URL matching the endpoint</param>
-        /// <param name="method">HTTP method matching the endpoint</param>
-        /// <returns>A previously registered endpoint of null if not found</returns>
         public async Task<Endpoint> GetEndpoint(string route, HttpMethod method)
         {
-            var endpoint = await _repository.GetEndpoint(method, route);
-
-            return endpoint;
+            return await _repository.GetEndpoint(method, route);
         }
 
-        /// <summary>
-        /// Register a set of endpoints.
-        /// </summary>
-        /// <param name="endpoint">Enumerable of endpoints to register</param>
         public async Task RegisterEndpoint(Endpoint endpoint)
         {
             await _repository.RegisterEndpoint(endpoint);
         }
 
-        /// <summary>
-        /// Register multiple endpoints. Errors do not stop the process, they are all returned as a collection after completion.
-        /// </summary>
-        /// <param name="endpoints">Endpoints to register</param>
-        /// <returns>A list of error</returns>
         public async Task<IEnumerable<EndpointDomainError>> RegisterEndpoints(IEnumerable<Endpoint> endpoints)
         {
             var errors = new List<EndpointDomainError>();
@@ -63,13 +46,19 @@ namespace RequestLogger.Domain.Services
             return errors;
         }
 
-        /// <summary>
-        /// Get all registered endpoints
-        /// </summary>
-        /// <returns>A list of endpoints</returns>
+        public async Task UpdateEndpoint(Endpoint endpoint)
+        {
+            await _repository.UpdateEndpoint(endpoint);
+        }
+
         public async Task<IList<Endpoint>> GetEndpoints()
         {
             return await _repository.GetAllEndpoints();
+        }
+
+        public async Task ClearEndpoints()
+        {
+            await _repository.DeleteAllEndpoints();
         }
     }
 }

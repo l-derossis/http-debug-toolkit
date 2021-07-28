@@ -12,11 +12,12 @@ export class EndpointsApiService {
   private readonly baseEndpoint: string =
     environment.apiUrl + '/api/configuration/endpoints';
   private readonly importEndpoint: string = this.baseEndpoint + '/import';
+  private readonly clearEndpoint: string = this.baseEndpoint + '/clear';
 
   constructor(private http: HttpClient) {}
 
-  registerEndpoint(endpoint: Endpoint): Observable<any> {
-    return this.http.post(this.baseEndpoint, endpoint);
+  registerEndpoint(endpoint: Endpoint): Observable<Endpoint> {
+    return this.http.post<Endpoint>(this.baseEndpoint, endpoint);
   }
 
   registerEndpoints(endpoints: Endpoint[]): Observable<any> {
@@ -25,8 +26,15 @@ export class EndpointsApiService {
 
   getEndpoints(): Observable<Endpoint[]> {
     return this.http
-      .get<any[]>(this.baseEndpoint)
+      .get<Endpoint[]>(this.baseEndpoint)
       .pipe(map((array) => this.convertApiEndpoints(array)));
+  }
+
+  updateEndpoint(endpoint: Endpoint): Observable<any> {
+    if (!endpoint.location)
+      throw new Error('Endpoint must have a location to be updated');
+
+    return this.http.put(endpoint.location, endpoint);
   }
 
   exportEndpointsRaw(): Observable<Blob> {
@@ -35,14 +43,22 @@ export class EndpointsApiService {
     });
   }
 
-  convertApiEndpoint(apiEndpoint: any): Endpoint {
-    return new Endpoint(
+  clearEndpoints(): Observable<string> {
+    return this.http.post(this.clearEndpoint, {}, { responseType: 'text' });
+  }
+
+  convertApiEndpoint(apiEndpoint: Endpoint): Endpoint {
+    const endpoint = new Endpoint(
       apiEndpoint.route,
       apiEndpoint.method,
       apiEndpoint.statusCode,
       apiEndpoint.body,
       apiEndpoint.headers
     );
+
+    endpoint.location = apiEndpoint.location;
+
+    return endpoint;
   }
 
   convertApiEndpoints(apiEndpoints: any[]): Endpoint[] {
